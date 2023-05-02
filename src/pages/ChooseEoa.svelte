@@ -1,0 +1,89 @@
+<script lang="ts">
+    import Onboard from '@web3-onboard/core'
+    import injectedModule from '@web3-onboard/injected-wallets'
+    import walletConnectModule from '@web3-onboard/walletconnect'
+    import {AppDescription, AppIcon, AppName, RpcEndpoint} from "../consts";
+    import {createEventDispatcher} from "svelte";
+
+    const injected = injectedModule()
+    const walletConnect = walletConnectModule()
+
+    const wallets = [
+        injected,
+        walletConnect
+    ]
+
+    const chains = [{
+        id: '0x1',
+        token: 'XDAI',
+        label: 'Gnosis Chain',
+        rpcUrl: RpcEndpoint
+    }]
+
+    const appMetadata = {
+        name: AppName,
+        icon: AppIcon,
+        description: AppDescription,
+        recommendedInjectedWallets: [
+            {name: 'MetaMask', url: 'https://metamask.io'},
+            {name: 'Rabby', url: 'https://rabby.io/'}
+        ]
+    }
+
+    const onboard = Onboard({
+        wallets,
+        chains,
+        appMetadata
+    })
+
+    // Subscribe to wallet updates
+    const wallets$ = onboard.state.select('wallets')
+
+    // The first wallet in the array of connected wallets
+    $: connectedAccount = $wallets$?.[0]?.accounts?.[0]
+
+    $: account = connectedAccount?.ens?.name
+        ? {
+            ens: connectedAccount?.ens,
+            address: connectedAccount?.address
+        }
+        : {address: connectedAccount?.address}
+
+    const dispatch = createEventDispatcher();
+
+    const connect = async () => {
+        await onboard.connectWallet()
+        const wallet = $wallets$?.[0]
+        dispatch('connected', wallet);
+    }
+
+    const disconnect = ({label}) => {
+        onboard.disconnectWallet({label})
+        dispatch('disconnected', label);
+    }
+</script>
+<div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">
+    <div class="hero-overlay bg-opacity-60"></div>
+    <div class="hero-content">
+        <div>
+            <div class="text-center text-neutral-content">
+                <h1 class="mb-2 text-5xl font-bold">Connect your wallet</h1>
+                <p class="mb-5">We will add the address of this wallet as additional owner to your safe.</p>
+            </div>
+            <div class="text-center text-neutral-content">
+                {#if $wallets$?.[0]?.provider}
+                    <div>
+                        <div class="mb-5 text-xl font-bold">{ connectedAccount.address }</div>
+                        <div  class="mb-5 text font-bold">Connected to {$wallets$?.[0]?.label}</div>
+                        <button class="btn btn-secondary" on:click={() => { disconnect($wallets$?.[0]) }}>Disconnect</button>
+                    </div>
+                {:else}
+                  <div>
+                      <button on:click={connect}
+                              class="btn btn-primary">Connect</button>
+                  </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
