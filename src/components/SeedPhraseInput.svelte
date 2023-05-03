@@ -44,7 +44,8 @@
                        class:text-error={!isValidMnemonic}
                        class:text-success={isValidMnemonic}
                        bind:value={boxes[i]}
-                       on:change={onInput} />
+                       on:change={onInput}
+                       on:keyup={onInput} />
             </label>
         </div>
     {/each}

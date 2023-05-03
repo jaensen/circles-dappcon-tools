@@ -27,7 +27,7 @@
 
     function onSafeSelected(safe: CirclesSafe) {
         selectedSafe = safe;
-        console.log(selectedSafe);
+        console.log("App2.selectedSafe:", selectedSafe);
     }
 
     function onImport() {
@@ -46,6 +46,10 @@
         mintingGroupCurrency = true;
     }
 
+    function onSignupCompleted(e) {
+        onSafeSelected(e.detail);
+    }
+
     function onImportSuccess(e) {
         onSafeSelected(e.detail);
         alert(
@@ -56,29 +60,27 @@
     }
 </script>
 
-<a name="home" />
+<a name="home"></a>
 {#if !selectedSafe}
     <Home />
 {:else if selectedSafe && selectedSafe.type !== "Signup" && selectedSafe.type !== "Import" && !mintingGroupCurrency}
     <Actions {selectedSafe} on:mintHoG={onMintHoG} />
 {/if}
 {#if !selectedSafe}
-    <a name="connect-circles-safe" />
-    <ConnectCirclesSafe
-        on:import={onImport}
-        on:signup={onSignup}
-        on:connected={eoaConnected}
-        on:disconnected={eoaDisconnected}
-        on:safeSelected={onSafeSelected}
-    />
+    <a name="connect-circles-safe"></a>
+    <ConnectCirclesSafe on:import={onImport}
+                        on:signup={onSignup}
+                        on:connected={eoaConnected}
+                        on:disconnected={eoaDisconnected}
+                        on:safeSelected={e => onSafeSelected(e.detail)}/>
 {/if}
 {#if selectedSafe?.type === "Signup"}
-    <Signup />
+    <Signup web3={web3}
+            owner={connectedWalletAddress}
+            on:signupCompleted={onSignupCompleted} />
 {/if}
 {#if selectedSafe?.type === "Import"}
-    <Import
-        newOwnerAddress={connectedWalletAddress}
-        on:success={onImportSuccess}
-    />
+    <Import newOwnerAddress={connectedWalletAddress}
+            on:success={onImportSuccess} />
 {/if}
 {#if mintingGroupCurrency && selectedSafe}{/if}

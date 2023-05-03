@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 </script>
 
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">

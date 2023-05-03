@@ -18,7 +18,7 @@
             <div class="text-center text-neutral-content">
                 <h1 class="mb-5 text-5xl font-bold">Select your safe</h1>
                 {#if circlesSafes && circlesSafes.length > 1}
-                    <p class="mb-5">You have multiple Circles Safes. Please select the one from below.</p>
+                    <p class="mb-5">You have multiple Circles Safes. Please select one from below.</p>
                 {:else if circlesSafes && circlesSafes.length === 1}
                     <p class="mb-5">Click on the Safe to continue.</p>
                 {:else if circlesSafes && circlesSafes.length === 0}

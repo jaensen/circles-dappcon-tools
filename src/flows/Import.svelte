@@ -33,6 +33,8 @@
     {#if hasValidKey}
         <a name="select-safe"></a>
         <ChooseSafe on:safeSelected={e => onSafeSelected(e.detail)}
+                    showImport={false}
+                    showSignup={false}
                     bind:ownerAddress={ownerAddress} />
     {/if}
     {#if selectedSafe}

@@ -4,11 +4,12 @@
     import HDWalletProvider from "@truffle/hdwallet-provider";
     import {mnemonicToEntropy} from "bip39";
     import {CirclesSafe} from "../models/circlesSafe";
-    import {createEventDispatcher, onMount} from "svelte";
+    import {createEventDispatcher} from "svelte";
     import {RpcEndpoint} from "../consts";
 
     export let mnemonicPhrase: string;
     export let newOwnerAddress: string;
+    export let currentOwnerAddresses: string[];
     export let selectedSafe: CirclesSafe;
 
     const dispatch = createEventDispatcher();
@@ -20,13 +21,12 @@
     let error = false;
     let status: string;
 
-    onMount(async () => {
+    async function setSelectedSafe(safe: CirclesSafe) {
         working = true;
         status = `Initializing provider ...`;
         const provider = new HDWalletProvider(<any>{
             privateKeys:[mnemonicToEntropy(mnemonicPhrase)],
             providerOrUrl: RpcEndpoint,
-
         });
         web3 = new Web3(provider);
 
@@ -38,12 +38,17 @@
 
         safeSdk = await Safe.create({
             ethAdapter,
-            safeAddress: selectedSafe.safeAddress,
+            safeAddress: safe.safeAddress,
             isL1SafeMasterCopy: false
         });
 
+        currentOwnerAddresses = (await safeSdk.getOwners()).map(o => o.toLowerCase());
         working = false;
-    });
+    }
+
+    $:{
+        setSelectedSafe(selectedSafe);
+    }
 
     async function addOwnerToSafe()
     {
@@ -52,6 +57,7 @@
         try {
             status = "Signing 'addOwner' transaction ...";
             const addOwnerTx = await safeSdk.createAddOwnerTx({ownerAddress: newOwnerAddress, threshold: 1})
+
             const safeTxHash = await safeSdk.getTransactionHash(addOwnerTx)
             const signature = await safeSdk.signTransactionHash(safeTxHash);
             addOwnerTx.addSignature(signature);
@@ -73,29 +79,34 @@
             working = false;
         }
     }
-
 </script>
 
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">
     <div class="hero-overlay bg-opacity-60"></div>
     <div class="hero-content text-center text-neutral-content">
         <div class="max-w-md">
-            <h1 class="mb-5 text-5xl font-bold">Add your EOA as Safe owner</h1>
-            <p class="mb-5">We now use your Circles seed phrase to add <br/>
-                <b>{newOwnerAddress}</b><br/> as owner of <br/>
-                <b>{selectedSafe.safeAddress}</b>.</p>
-            {#if web3}
-                {#if !working && !error}
-                    <button on:click={addOwnerToSafe} class="btn btn-primary">Add owner</button>
-                {:else if error}
-                    <button on:click={addOwnerToSafe} class="btn btn-active">Retry: Add owner</button>
-                    <p class="text-error">{status}</p>
-                {:else}
-                    <button class="loading btn btn-active">Working ...</button>
-                    <p class="text-info">{status}</p>
-                {/if}
+            {#if currentOwnerAddresses?.indexOf(newOwnerAddress.toLowerCase()) > -1}
+                <h1 class="mb-5 text-5xl font-bold">Your wallet is already an owner of this safe</h1>
+                <p class="mb-5">You can already control this Circles Safe with your wallet. There's nothing to do here.</p>
+                <button on:click={() => dispatch("success", selectedSafe)} class="btn btn-primary">Finish</button>
             {:else}
-                <p class="text-error">Error: Couldn't use the connected wallet as web3 provider.</p>
+                <h1 class="mb-5 text-5xl font-bold">Add your EOA as Safe owner</h1>
+                <p class="mb-5">We now use your Circles seed phrase to add <br/>
+                    <b>{newOwnerAddress}</b><br/> as owner of <br/>
+                    <b>{selectedSafe.safeAddress}</b>.</p>
+                {#if web3}
+                    {#if !working && !error}
+                        <button on:click={addOwnerToSafe} class="btn btn-primary">Add owner</button>
+                    {:else if error}
+                        <button on:click={addOwnerToSafe} class="btn btn-active">Retry: Add owner</button>
+                        <p class="text-error">{status}</p>
+                    {:else}
+                        <button class="loading btn btn-active">Working ...</button>
+                        <p class="text-info">{status}</p>
+                    {/if}
+                {:else}
+                    <p class="text-error">Error: Couldn't use the connected wallet as web3 provider.</p>
+                {/if}
             {/if}
         </div>
     </div>
