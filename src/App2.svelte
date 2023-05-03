@@ -1,7 +1,7 @@
 <script lang="ts">
-    import './app.css'
+    import "./app.css";
     import Home from "./pages/Home.svelte";
-    import {CirclesSafe} from "./models/circlesSafe";
+    import { CirclesSafe } from "./models/circlesSafe";
     import ConnectCirclesSafe from "./flows/ConnectCirclesSafe.svelte";
     import Web3 from "web3";
     import Import from "./flows/Import.svelte";
@@ -13,6 +13,7 @@
     let selectedSafe: CirclesSafe;
     let connectedWalletAddress: string;
     let web3: Web3;
+    let mintingGroupCurrency: boolean;
 
     function eoaConnected(event) {
         const wallet = event.detail;
@@ -26,45 +27,58 @@
 
     function onSafeSelected(safe: CirclesSafe) {
         selectedSafe = safe;
-        console.log(selectedSafe)
+        console.log(selectedSafe);
     }
 
     function onImport() {
         selectedSafe = <CirclesSafe>{
-            type: "Import"
+            type: "Import",
         };
     }
 
     function onSignup() {
         selectedSafe = <CirclesSafe>{
-            type: "Signup"
+            type: "Signup",
         };
+    }
+
+    function onMintHoG() {
+        mintingGroupCurrency = true;
     }
 
     function onImportSuccess(e) {
         onSafeSelected(e.detail);
-        alert("Imported safe " + selectedSafe.safeAddress + " successfully. However it can take a while until it shows up in this application.");
+        alert(
+            "Imported safe " +
+                selectedSafe.safeAddress +
+                " successfully. However it can take a while until it shows up in this application."
+        );
     }
 </script>
 
-<a name="home"></a>
+<a name="home" />
 {#if !selectedSafe}
     <Home />
-{:else if selectedSafe && !(selectedSafe.type !== "Signup" || selectedSafe.type !== "Import")}
-    <Actions selectedSafe={selectedSafe} />
+{:else if selectedSafe && selectedSafe.type !== "Signup" && selectedSafe.type !== "Import" && !mintingGroupCurrency}
+    <Actions {selectedSafe} on:mintHoG={onMintHoG} />
 {/if}
 {#if !selectedSafe}
-    <a name="connect-circles-safe"></a>
-    <ConnectCirclesSafe on:import={onImport}
-                        on:signup={onSignup}
-                        on:connected={eoaConnected}
-                        on:disconnected={eoaDisconnected}
-                        on:safeSelected={onSafeSelected}/>
+    <a name="connect-circles-safe" />
+    <ConnectCirclesSafe
+        on:import={onImport}
+        on:signup={onSignup}
+        on:connected={eoaConnected}
+        on:disconnected={eoaDisconnected}
+        on:safeSelected={onSafeSelected}
+    />
 {/if}
 {#if selectedSafe?.type === "Signup"}
     <Signup />
 {/if}
 {#if selectedSafe?.type === "Import"}
-    <Import newOwnerAddress={connectedWalletAddress}
-            on:success={onImportSuccess} />
+    <Import
+        newOwnerAddress={connectedWalletAddress}
+        on:success={onImportSuccess}
+    />
 {/if}
+{#if mintingGroupCurrency && selectedSafe}{/if}

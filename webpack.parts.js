@@ -14,7 +14,7 @@ exports.devServer = () => ({
     watch: true,
     plugins: [
         new WebpackPluginServe({
-            port: 5000,
+            port: 5001,
             static: path.resolve(process.cwd(), 'dist'),
             historyFallback: true
         })
@@ -182,6 +182,7 @@ exports.polyfills = () => ({
     plugins: [
         new webpack.ProvidePlugin({
             process: "process/browser",
-            Buffer: ["buffer", "Buffer"]})
+            Buffer: ["buffer", "Buffer"]
+        })
     ]
 });
