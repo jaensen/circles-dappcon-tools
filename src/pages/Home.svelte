@@ -1,4 +1,12 @@
 <script lang="ts">
+
+    fetch("https://dev.api.circlesubi.id/", {
+        "headers": {
+            "content-type": "application/json",
+        },
+        "body": "{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  profilesBySafeAddress(\\n    safeAddresses: \\\"0x123\\\"\\n  ) {\\n    circlesAddress\\n    balances {\\n      crcBalances {\\n        lastUpdatedAt\\n        total\\n      }\\n    }\\n  }\\n}\\n\"}",
+        "method": "POST"
+    }).then(o => console.log(o));
 </script>
 
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">

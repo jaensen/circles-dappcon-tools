@@ -1,6 +1,6 @@
 import {createLiveSearchStore} from "./createLiveSearchStore";
 import Web3 from "web3";
-import {CirclesSafe} from "../../models/circlesSafe";
+import type {CirclesSafe} from "../../models/circlesSafe";
 import {CirclesGardenApi, CirclesSubgraphApi} from "../../consts";
 
 export type CirclesSafeMap = { [safeAddress: string]: CirclesSafe };

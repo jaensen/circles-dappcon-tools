@@ -14,7 +14,7 @@ exports.devServer = () => ({
     watch: true,
     plugins: [
         new WebpackPluginServe({
-            port: 5001,
+            port: 5000,
             static: path.resolve(process.cwd(), 'dist'),
             historyFallback: true
         })

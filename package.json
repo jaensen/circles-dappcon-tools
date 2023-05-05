@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "develop": "webpack --mode development",
-    "build": "webpack --mode production"
+    "build": "NODE_ENV=production webpack"
   },
   "dependencies": {
     "@circles/timecircles": "^1.0.6",
