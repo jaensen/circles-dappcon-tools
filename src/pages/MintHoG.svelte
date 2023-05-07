@@ -8,6 +8,7 @@
     import {HoGTokenAddress, HubAddress} from "../consts";
     import {CirclesSafe} from "../models/circlesSafe";
     import {GROUP_CURRENCY_TOKEN_ABI} from "../abis/groupCurrencyToken";
+    import {crcToTc} from "@jaensen/timecircles";
 
     export let web3: Web3;
     export let circlesSafe: CirclesSafe;
@@ -16,6 +17,16 @@
     let status: string;
     let isMinting: boolean;
     let isError: boolean;
+    let isSuccess: boolean;
+    let crcAmount: string;
+    let tcAmount: string;
+
+    $:{
+        if (mintAmount) {
+            crcAmount = Web3.utils.toWei(mintAmount.toString(), "ether");
+            tcAmount = crcToTc(Date.now(), mintAmount).toFixed(2);
+        }
+    }
 
     async function generateTransferThroughCallData(path: PaymentPath) : Promise<MetaTransactionData> {
         const hubContractCallArgs = path.path.reduce((p, c) => {
@@ -72,6 +83,7 @@
 
     async function mintHoG(mintAmount: number) {
         try {
+            isSuccess = false;
             isError = false;
             isMinting = true;
             status = "Initializing safe sdk...";
@@ -89,7 +101,8 @@
 
             let safeTransactionData: MetaTransactionData[] = [];
 
-            const crcAmount = Web3.utils.toWei(tcToCrc(Date.now(), mintAmount).toString(), "ether");
+            crcAmount = Web3.utils.toWei(mintAmount.toString(), "ether");
+            tcAmount = crcToTc(Date.now(), mintAmount).toFixed(2);
 
             status = "Calculating collateral transfer path...";
             const path = await getPath(circlesSafe.safeAddress, HoGTokenAddress, crcAmount);
@@ -111,10 +124,12 @@
 
             status = `Safe transaction sent.<br/><a href="https://gnosisscan.io/tx/${transactionResult.hash}">Open on GnosisScan</a>`;
             isMinting = false;
+            isSuccess = true;
         } catch (e) {
             console.error(e);
             isError = true;
             status = e.message;
+            isSuccess = false;
         } finally {
             isMinting = false;
         }
@@ -124,16 +139,25 @@
     <div class="hero-overlay bg-opacity-60"></div>
     <div class="hero-content text-center text-neutral-content">
         <div>
-            {#if mintAmount}
+            {#if mintAmount && crcAmount && tcAmount}
                 <p>You mint: </p>
                 <h1 class="mb-5 text-5xl font-bold">{mintAmount} HoG</h1>
+                <p>for</p>
+                <h2 class="mb-5 text-2xl font-bold">{tcAmount} Circles ({Number.parseFloat(web3.utils.fromWei(crcAmount, "ether")).toFixed(0)} CRC)</h2>
             {/if}
             {#if status && status.trim() !== ""}
-                <p class="text-info" class:text-error={isError}>{@html status}</p>
+                {#if !isError && !isSuccess}
+                    <progress class="progress w-56"></progress>
+                {/if}
+                <p class:text-info={!isError} class:text-error={isError}>{@html status}</p>
             {/if}
-            <div class="form-control">
-                <button disabled={isMinting} on:click={() => mintHoG(mintAmount)} class="btn btn-primary">{!isError ? "" : "Retry: "}Mint HoG</button>
-            </div>
+            {#if !isSuccess}
+                <div class="form-control">
+                    <button disabled={isMinting} on:click={() => mintHoG(mintAmount)} class="btn btn-primary">{!isError ? "" : "Retry: "}Mint HoG</button>
+                </div>
+            {:else}
+                <p class="text-success">Minting completed successfully.</p>
+            {/if}
         </div>
         <!--
         <FlowGraph/>

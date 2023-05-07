@@ -25,6 +25,7 @@
     <p>'web3' not set</p>
 {:else}
     <BalanceAndMaxFlow on:mint={e => onMintHoG(e.detail)}
+                       web3={web3}
                        circlesSafe={circlesSafe}
                        toAddress={HoGTokenAddress} />
     {#if mintAmount > 0}

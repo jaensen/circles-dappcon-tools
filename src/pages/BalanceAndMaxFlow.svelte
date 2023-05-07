@@ -4,41 +4,34 @@
     import {getCrcBalance, getMaxFlow} from "../api";
     import {crcToTc} from "@jaensen/timecircles";
     import Web3 from "web3";
+    import {createFindPaymentPath} from "../stores/factories/createFindPaymentPath";
+    import {createFindCrcBalance} from "../stores/factories/createFindCrcBalance";
+    import {createFindHoGBalance} from "../stores/factories/createFindHoGBalance";
 
     export let circlesSafe: CirclesSafe;
     export let toAddress: string;
+    export let web3: Web3;
 
-    const loadingBalanceText = "Loading your Circles balance ..";
-    const loadingFlowText = "Calculating max. amount ..";
-
-    let crcBalance: string;
-    let maxFlow: string;
     let mintAmount: number;
 
-    let status: string[] = [];
+    const paymentPathStore = createFindPaymentPath();
+    const crcBalanceStore = createFindCrcBalance();
+    const hogBalanceStore = createFindHoGBalance();
 
     onMount(async () => {
-        if (circlesSafe?.safeAddress) {
-            status.push(loadingBalanceText);
-            status=status;
-            getCrcBalance(circlesSafe.safeAddress)
-                .then(balance => {
-                    crcBalance = crcToTc(Date.now(), Number.parseFloat(Web3.utils.fromWei(balance, "ether"))).toFixed(2);
-                    status.splice(status.indexOf(loadingBalanceText), 1);
-                    status=status;
-                });
-        }
         if (circlesSafe?.safeAddress && toAddress) {
-            status.push(loadingFlowText);
-            status=status;
-            getMaxFlow(circlesSafe.safeAddress, toAddress, "99999999999999999000000000000000000")
-                .then(flow => {
-                    maxFlow = crcToTc(Date.now(), Number.parseFloat(Web3.utils.fromWei(flow, "ether"))).toFixed(2);
-                    status.splice(status.indexOf(loadingFlowText), 1);
-                    status=status;
-                });
+            paymentPathStore.search({
+                from: circlesSafe.safeAddress,
+                to: toAddress,
+                amount: "99999999999999999000000000000000000",
+                web3: web3
+            });
         }
-    })
+        if (circlesSafe?.safeAddress) {
+            crcBalanceStore.search({address: circlesSafe.safeAddress});
+            hogBalanceStore.search({address: circlesSafe.safeAddress, web3: web3});
+        }
+    });
 
     const dispatch = createEventDispatcher();
 </script>
@@ -47,26 +40,53 @@
     <div class="hero-overlay bg-opacity-60"></div>
     <div class="hero-content text-center text-neutral-content">
         <div>
-            {#if crcBalance}
-                <p>Your balance: </p>
-                <h1 class="mb-5 text-5xl font-bold">{crcBalance} Circles</h1>
+            {#if !$crcBalanceStore.result}
+                <progress class="progress w-56"></progress>
+                <p class="text-info">Loading your Circles balance ...</p>
+            {:else if $crcBalanceStore.result}
+                <p>Your Circles balance: </p>
+                <h1 class="mb-5 text-5xl font-bold">{Math.floor(crcToTc(Date.now(), Number.parseFloat(Web3.utils.fromWei($crcBalanceStore.result, "ether"))))} Circles</h1>
+            {:else if $crcBalanceStore.error}
+                <p class="text-error">
+                    An error occurred while loading your Circles balance:<br/>
+                    {$paymentPathStore.error.message}
+                </p>
             {/if}
-            {#if maxFlow}
+            {#if !$hogBalanceStore.result}
+                <progress class="progress w-56"></progress>
+                <p class="text-info">Loading your HoG balance ...</p>
+            {:else if $hogBalanceStore.result}
+                <p>Your HoG balance: </p>
+                <h1 class="mb-5 text-5xl font-bold">{$hogBalanceStore.result} HoG</h1>
+            {:else if $hogBalanceStore.error}
+                <p class="text-error">
+                    An error occurred while loading your HoG balance:<br/>
+                    {$paymentPathStore.error.message}
+                </p>
+            {/if}
+            {#if !$paymentPathStore.result}
+                <progress class="progress w-56"></progress>
+                <p class="text-info">Calculating your token minting limit ...</p>
+            {:else if $paymentPathStore.error}
+                <p class="text-error">
+                    An error occurred while calculating your token minting limit:<br/>
+                    {$paymentPathStore.error.message}
+                </p>
+            {:else if $paymentPathStore.result?.maxFlow}
                 <p>You can mint: </p>
-                <h2 class="mb-5 text-3xl font-bold">{maxFlow} HoG</h2>
+                <h2 class="mb-5 text-3xl font-bold">{Math.floor(Number.parseFloat(web3.utils.fromWei($paymentPathStore.result.maxFlow, "ether")))} HoG</h2>
             {/if}
-            {#if status.length > 0}
-                <p class="text-info">{@html status.join("<br/>")}</p>
-            {/if}
-            {#if crcBalance && maxFlow}
+            {#if $paymentPathStore.result && $paymentPathStore?.result?.maxFlow}
                 <div class="form-control">
-                    <input type="number" class="form-input text-info" placeholder="Amount" min="0" max={maxFlow} bind:value={mintAmount}/>
+                    <input type="number"
+                           class="input input-bordered w-full max-w-xs text-info mb-5"
+                           placeholder="Amount"
+                           min="0"
+                           max={Math.floor(Number.parseFloat(web3.utils.fromWei($paymentPathStore.result.maxFlow, "ether")))}
+                           bind:value={mintAmount} />
                     <button on:click={() => dispatch("mint", mintAmount)} class="btn btn-primary">Mint HoG</button>
                 </div>
             {/if}
         </div>
-        <!--
-        <FlowGraph/>
-        -->
     </div>
 </div>

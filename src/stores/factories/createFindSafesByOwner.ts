@@ -65,7 +65,7 @@ async function queryCirclesSubgraph(ownerAddress: string) {
     return safesByOwner.data.user?.safeAddresses ?? [];
 }
 
-export const createFindSafesByOwner = () => createLiveSearchStore(200, async (ownerAddress: string) => {
+export const createFindSafesByOwner = () => createLiveSearchStore<string, CirclesSafe[]>(200, async (ownerAddress: string) => {
     if (!ownerAddress || ownerAddress.length !== 42 || !new Web3().utils.isAddress(ownerAddress)) {
         return [];
     }
