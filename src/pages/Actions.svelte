@@ -1,6 +1,9 @@
 <script lang="ts">
     import {CirclesSafe} from "../models/circlesSafe";
+    import {createEventDispatcher} from "svelte";
     export let selectedSafe:CirclesSafe;
+
+    const dispatch = createEventDispatcher();
 </script>
 
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">
@@ -11,9 +14,9 @@
                 ? selectedSafe.safeAddress
                 : selectedSafe.userName}!</h1>
             <p class="mb-5">You can do the following things with your Circles Safe:</p>
-            <button class="btn btn-primary mb-5" on:click={() => {}}>Mint HoG</button><br/>
-            <button class="btn btn-primary mb-5" on:click={() => {}}>Transfer HoG</button><br/>
-            <button class="btn btn-primary" on:click={() => {}}>Transfer CRC</button>
+            <button class="btn btn-primary mb-5" on:click={() => dispatch("mintHoG")}>Mint HoG</button><br/>
+            <button class="btn btn-primary mb-5" on:click={() => dispatch("transferHoG")}>Transfer HoG</button><br/>
+            <button class="btn btn-primary" on:click={() => dispatch("transferCrc")}>Transfer CRC</button>
         </div>
     </div>
 </div>

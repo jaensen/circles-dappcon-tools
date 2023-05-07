@@ -17,7 +17,9 @@
     "bip39": "^3.1.0",
     "nullthrows": "^1.1.1",
     "svelte-spa-router": "^3.3.0",
-    "web3": "^1.9.0"
+    "web3": "^1.9.0",
+    "vis-network": "^9.1.6",
+    "@jaensen/timecircles": "^1.0.5"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
