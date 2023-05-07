@@ -5,6 +5,8 @@
     import HubSignup from "../pages/HubSignup.svelte";
     import {TransactionResult} from "@safe-global/safe-core-sdk-types";
     import {createEventDispatcher} from "svelte";
+    import {selectedSafe} from "../stores/singletons/selectedSafe";
+    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
 
     export let web3: Web3;
     export let owner: string;
@@ -17,6 +19,13 @@
 
     function onSafeDeployed(event: CustomEvent) {
         deployedSafe = event.detail;
+        selectedSafe.set({
+            safeAddress: deployedSafe.getAddress(),
+            ownerAddress: $connectedWalletAddress,
+            userName: deployedSafe.getAddress(),
+            type: "Person",
+            userAvatar: "https://avatars.dicebear.com/api/avataaars/0x" + deployedSafe.getAddress() + ".svg"
+        })
     }
 
     function onSignupCompleted(event: TransactionResult) {
@@ -25,15 +34,10 @@
     }
 </script>
 
-{#if !web3}
-    <p>'web3' not set</p>
-{:else if !deployedSafe}
-    <DeploySafe owner={owner}
-                web3={web3}
-                threshold={threshold}
+{#if !deployedSafe}
+    <DeploySafe threshold={threshold}
                 on:safeDeployed={onSafeDeployed} />
-{:else if deployedSafe}
-    <HubSignup web3={web3}
-               safe={deployedSafe}
+{:else}
+    <HubSignup safe={deployedSafe}
                on:signupCompleted={onSignupCompleted} />
 {/if}

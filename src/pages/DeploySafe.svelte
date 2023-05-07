@@ -1,10 +1,9 @@
 <script lang="ts">
-    import Web3 from "web3";
     import {SafeAccountConfig, SafeFactory, Web3Adapter} from "@safe-global/protocol-kit";
     import {createEventDispatcher} from "svelte";
+    import {web3} from "../stores/singletons/web3";
+    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
 
-    export let web3: Web3;
-    export let owner: string;
     export let threshold: number = 1;
 
     let working = false;
@@ -15,7 +14,7 @@
     const dispatch = createEventDispatcher();
 
     async function deploySafe() {
-        if (!owner || owner === "") {
+        if (!$connectedWalletAddress || $connectedWalletAddress === "") {
             status = `No owner provided`;
             error = true;
             return;
@@ -24,21 +23,20 @@
         try {
             error = false;
             working = true;
-            status = `Initializing provider ...`;
-
+            status = `Initializing safe sdk ...`;
             const ethAdapter = new Web3Adapter({
-                web3,
-                signerAddress: owner
+                web3: $web3,
+                signerAddress: $connectedWalletAddress
             });
 
-            status = `Deploying safe ...`;
+            status = `Creating safe factory ...`;
             const safeFactory = await SafeFactory.create({ethAdapter, isL1SafeMasterCopy: false})
             const safeAccountConfig: SafeAccountConfig = {
-                owners: [owner],
+                owners: [$connectedWalletAddress],
                 threshold: threshold
             };
-            console.log("safeAccountConfig:", safeAccountConfig);
 
+            status = `Deploying safe ...`;
             const safe = await safeFactory.deploySafe({safeAccountConfig});
             status = `Address: ${safe.getAddress()}`;
 
@@ -60,14 +58,14 @@
             <h1 class="mb-5 text-5xl font-bold">Deploy a new Safe</h1>
             <p class="mb-5">Click the button below to deploy a new Circles Safe on the Gnosis Chain</p>
             {#if !working && !error && !done}
-                <button on:click={deploySafe} class="btn btn-primary">Deploy</button>
+                <button on:click={deploySafe} class="btn btn-primary mb-5">Deploy</button>
             {:else if error}
-                <button on:click={deploySafe} class="btn btn-active">Retry: Deploy</button>
+                <button on:click={deploySafe} class="btn btn-active mb-5">Retry: Deploy</button>
                 <p class="text-error">{status}</p>
             {:else if done}
                 <p class="text-success">{status}</p>
             {:else}
-                <button class="loading btn btn-active">Working ...</button>
+                <progress class="progress w-56"></progress>
                 <p class="text-info">{status}</p>
             {/if}
         </div>

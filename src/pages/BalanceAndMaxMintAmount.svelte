@@ -49,7 +49,7 @@
             {:else if $crcBalanceStore.error}
                 <p class="text-error">
                     An error occurred while loading your Circles balance:<br/>
-                    {$paymentPathStore.error.message}
+                    {$crcBalanceStore.error.message}
                 </p>
             {/if}
             {#if !$hogBalanceStore.result}
@@ -61,7 +61,7 @@
             {:else if $hogBalanceStore.error}
                 <p class="text-error">
                     An error occurred while loading your HoG balance:<br/>
-                    {$paymentPathStore.error.message}
+                    {$hogBalanceStore.error.message}
                 </p>
             {/if}
             {#if !$paymentPathStore.result}

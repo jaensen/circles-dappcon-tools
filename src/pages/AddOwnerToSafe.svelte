@@ -101,7 +101,7 @@
                         <button on:click={addOwnerToSafe} class="btn btn-active">Retry: Add owner</button>
                         <p class="text-error">{status}</p>
                     {:else}
-                        <button class="loading btn btn-active">Working ...</button>
+                        <progress class="progress w-56"></progress>
                         <p class="text-info">{status}</p>
                     {/if}
                 {:else}

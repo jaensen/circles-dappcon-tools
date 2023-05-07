@@ -162,6 +162,9 @@ exports.analyze = () => ({
 exports.polyfills = () => ({
     //...
     resolve: {
+        alias: {
+            "regexparam": path.resolve(__dirname, 'node_modules/regexparam')
+        },
         fallback: {
             assert: require.resolve('assert'),
             buffer: require.resolve('buffer'),
