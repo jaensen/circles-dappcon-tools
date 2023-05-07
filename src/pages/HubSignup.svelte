@@ -33,7 +33,8 @@
                 safeTransactionData: safeTransactionData
             });
 
-            const transactionResult = await safe.executeTransaction(safeTransaction);
+            const signedTx = await safe.signTransaction(safeTransaction);
+            const transactionResult = await safe.executeTransaction(signedTx);
 
             status = `Signed up!`;
             dispatch('signupCompleted', transactionResult);

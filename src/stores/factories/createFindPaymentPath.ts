@@ -40,7 +40,7 @@ export const createFindPaymentPath = () => createLiveSearchStore<PaymentPathSear
     }
 
     // Check if 'from' and 'to' are signed up at the Circles Hub
-    const hubContract = new searchArgs.web3.eth.Contract(HUB_ABI, HubAddress);
+    const hubContract = new searchArgs.web3.eth.Contract(<any>HUB_ABI, HubAddress);
     const isSignedUpResult = await Promise.all([
           hubContract.methods.userToToken(searchArgs.from).call()
         , hubContract.methods.organizations(searchArgs.from).call()
