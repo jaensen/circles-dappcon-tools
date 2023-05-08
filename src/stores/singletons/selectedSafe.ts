@@ -1,4 +1,4 @@
 import {writable} from "svelte/store";
-import {CirclesSafe} from "../../models/circlesSafe";
+import type {CirclesSafe} from "../../models/circlesSafe";
 
 export const selectedSafe = writable<CirclesSafe>(undefined);
