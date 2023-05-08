@@ -6,11 +6,13 @@
     export let ownerAddress = '';
     export let showSignup = true;
     export let showImport = true;
+    export let anchorElementId = "ChooseSafe";
 
     let circlesSafes: CirclesSafe[];
 
     const dispatcher = createEventDispatcher();
 </script>
+<div id={anchorElementId}></div>
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">
     <div class="hero-overlay bg-opacity-60"></div>
     <div class="hero-content">

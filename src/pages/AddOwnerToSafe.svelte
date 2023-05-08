@@ -11,6 +11,7 @@
     export let newOwnerAddress: string;
     export let currentOwnerAddresses: string[];
     export let selectedSafe: CirclesSafe;
+    export let anchorElementId = "AddOwnerToSafe";
 
     const dispatch = createEventDispatcher();
 
@@ -81,6 +82,7 @@
     }
 </script>
 
+<div id={anchorElementId}></div>
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">
     <div class="hero-overlay bg-opacity-60"></div>
     <div class="hero-content text-center text-neutral-content">

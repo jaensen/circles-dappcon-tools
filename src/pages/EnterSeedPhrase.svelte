@@ -1,10 +1,13 @@
 <script lang="ts">
     import SeedPhraseInput from "../components/SeedPhraseInput.svelte";
+    import {createEventDispatcher} from "svelte";
 
     export let hasValidKey = false;
     export let privateKey = '';
     export let address = '';
     export let mnemonicPhrase:string = '';
+
+    const dispatch = createEventDispatcher();
 </script>
 <div class="hero min-h-screen" style="background-image: url(/images/photo-1507358522600-9f71e620c44e.jpg);">
     <div class="hero-overlay bg-opacity-60"></div>
@@ -24,11 +27,8 @@
             </div>
             <div class="text-center text-neutral-content">
                 {#if hasValidKey && address !== ''}
-                    <button on:click={() => {
-                               document.location.hash = '-';
-                               document.location.hash = 'select-safe';
-                            }}
-                            class="btn btn-primary">Proceed with<br/> {address}</button>
+                    <button on:click={() => dispatch('eoaLoaded', address)}
+                    class="btn btn-primary">Proceed with<br/> {address}</button>
                 {/if}
             </div>
         </div>
