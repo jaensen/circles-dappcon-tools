@@ -1,6 +1,6 @@
 <script lang="ts">
     import "./app.css";
-    import Router from 'svelte-spa-router'
+    import Router from "svelte-spa-router";
 
     import ConnectCirclesSafe from "./routes/ConnectCirclesSafe.svelte";
     import ConnectWallet from "./pages/ConnectWallet.svelte";
@@ -11,13 +11,14 @@
     import TransferHog from "./routes/TransferHog.svelte";
 
     const routes = {
-        '/': Home,
-        '/connect-wallet': ConnectWallet,
-        '/connect-circles-safe': ConnectCirclesSafe,
-        '/import-circles-safe': ImportCirclesSafe,
-        '/create-circles-safe': CreateCirclesSafe,
-        '/mint-hog': MintHoG,
-        '/transfer-hog': TransferHog,
-    }
+        "/": Home,
+        "/connect-wallet": ConnectWallet,
+        "/connect-circles-safe": ConnectCirclesSafe,
+        "/import-circles-safe": ImportCirclesSafe,
+        "/create-circles-safe": CreateCirclesSafe,
+        "/mint-hog": MintHoG,
+        "/transfer-hog": TransferHog,
+    };
 </script>
-<Router {routes}/>
+
+<Router {routes} />
