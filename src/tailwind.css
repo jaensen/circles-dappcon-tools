@@ -1,0 +1,22 @@
+.btn {
+    box-sizing: border-box;
+    height: 35px;
+    width: 370px;
+    font-size: 25px;
+    text-align: center;
+    text-transform: initial;
+    border: 1px solid #FFFFFF;
+    border-radius: 30px;
+}
+
+.btn-primary:hover {
+    background-color: initial;
+    border: 2px solid #FFFFFF;
+}
+
+.text-primary {
+    color: #FFFFFF;
+    font-style: normal;
+    font-weight: 400;
+    font-family: 'Averta';
+}

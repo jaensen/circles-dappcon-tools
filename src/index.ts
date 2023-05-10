@@ -1,3 +1,4 @@
-import App from './App2.svelte';
+// @ts-ignore
+import App from './App.svelte';
 
 export default (new App({ target: document.body }));

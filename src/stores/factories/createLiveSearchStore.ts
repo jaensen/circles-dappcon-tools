@@ -12,16 +12,24 @@ import { writable } from 'svelte/store';
  * @param {TResult} defaultValue - The default value for the store.
  * @returns {{subscribe: import('svelte/store').Readable<T | undefined>; search: (searchArg: T) => Promise<void>;}} - An object containing a `subscribe` function for subscribing to store changes and a `search` function for performing live searches.
  */
-export function createLiveSearchStore<TArg, TResult>(throttleInterval: number, performLiveSearch: (searchArg: TArg) => Promise<TResult>, defaultValue?: TResult) {
+export function createLiveSearchStore<TArg, TResult>(
+    throttleInterval: number,
+    performLiveSearch: (searchArg: TArg) => Promise<TResult>,
+    defaultValue?: TResult
+) {
     let buffer: TArg | undefined = undefined;
     let executing = false;
 
-    const { subscribe, set } = writable<TResult | undefined>(defaultValue);
+    const { subscribe, set } = writable<{ result: TResult | undefined; error: any }>({ result: defaultValue, error: undefined });
 
     async function executeSearch(searchArg: TArg) {
         executing = true;
-        const result = await performLiveSearch(searchArg);
-        set(result);
+        try {
+            const result = await performLiveSearch(searchArg);
+            set({ result, error: undefined });
+        } catch (error) {
+            set({ result: undefined, error });
+        }
         executing = false;
 
         if (buffer) {

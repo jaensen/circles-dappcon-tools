@@ -14,7 +14,7 @@ exports.devServer = () => ({
     watch: true,
     plugins: [
         new WebpackPluginServe({
-            port: 5001,
+            port: 5000,
             static: path.resolve(process.cwd(), 'dist'),
             historyFallback: true
         })
@@ -162,6 +162,9 @@ exports.analyze = () => ({
 exports.polyfills = () => ({
     //...
     resolve: {
+        alias: {
+            "regexparam": path.resolve(__dirname, 'node_modules/regexparam')
+        },
         fallback: {
             assert: require.resolve('assert'),
             buffer: require.resolve('buffer'),

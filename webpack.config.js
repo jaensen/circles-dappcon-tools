@@ -26,7 +26,7 @@ const production = merge([
         { entry: ['./src/index.ts'] },
         parts.typescript(),
         parts.optimize(),
-        parts.analyze()
+        // parts.analyze()
     ].filter(Boolean)
 )
 
