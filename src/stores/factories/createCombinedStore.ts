@@ -1,4 +1,5 @@
-import {readable, Readable} from 'svelte/store';
+import {readable} from 'svelte/store';
+import type {Readable} from 'svelte/store';
 
 type Store<T> = Readable<T> | {
     subscribe: (run: (value: T) => void) => () => void;
