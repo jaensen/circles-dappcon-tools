@@ -37,8 +37,8 @@
                 {#if hasValidKey && address !== ""}
                     <button
                         on:click={() => {
-                            jumpToAnchor("select-safe");
                             dispatch("eoaLoaded", address);
+                            jumpToAnchor("select-safe");
                         }}
                         class="btn btn-primary">Proceed with address</button
                     >
