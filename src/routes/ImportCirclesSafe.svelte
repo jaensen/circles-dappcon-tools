@@ -6,6 +6,7 @@
     import AddOwnerToSafe from "../pages/AddOwnerToSafe.svelte";
     import { selectedSafe } from "../stores/singletons/selectedSafe";
     import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
+    import { push } from "svelte-spa-router";
 
     const dispatcher = createEventDispatcher();
 
@@ -13,8 +14,22 @@
     let hasValidKey = false;
     let mnemonicPhrase: string;
 
+    const chooseSafeAnchorElementId: string = "ChooseSafe";
+    const addOwnerAnchorElementId: string = "AddOwnerToSafe";
+
     function onSafeSelected(safe: CirclesSafe) {
         selectedSafe.set(safe);
+        document.getElementById(addOwnerAnchorElementId).scrollIntoView();
+    }
+
+    function onEoaLoaded(event) {
+        // const eoaAddress = event.detail;
+        document.getElementById(chooseSafeAnchorElementId).scrollIntoView();
+    }
+
+    function onAddOwnerSuccess(event) {
+        selectedSafe.set(event.detail);
+        push("/");
     }
 </script>
 
@@ -25,6 +40,7 @@
     </p>
 {:else}
     <EnterSeedPhrase
+        on:eoaLoaded={onEoaLoaded}
         bind:mnemonicPhrase
         bind:address={ownerAddress}
         bind:hasValidKey
@@ -32,6 +48,7 @@
     {#if hasValidKey}
         <ChooseSafe
             on:safeSelected={(e) => onSafeSelected(e.detail)}
+            anchorElementId={chooseSafeAnchorElementId}
             showImport={false}
             showSignup={false}
             bind:ownerAddress
@@ -40,7 +57,8 @@
     {#if $selectedSafe}
         <AddOwnerToSafe
             selectedSafe={$selectedSafe}
-            on:success
+            anchorElementId={addOwnerAnchorElementId}
+            on:success={onAddOwnerSuccess}
             bind:mnemonicPhrase
             newOwnerAddress={$connectedWalletAddress}
         />

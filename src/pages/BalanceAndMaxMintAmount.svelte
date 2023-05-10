@@ -18,6 +18,12 @@
     const crcBalanceStore = createFindCrcBalance();
     const hogBalanceStore = createFindHoGBalance();
 
+    const combinedStore = createCombinedStore({
+        paymentPath: paymentPathStore,
+        crcBalance: crcBalanceStore,
+        hogBalance: hogBalanceStore,
+    });
+
     onMount(async () => {
         if (circlesSafe?.safeAddress && toAddress) {
             paymentPathStore.search({
@@ -34,6 +40,10 @@
                 web3: web3,
             });
         }
+    });
+
+    combinedStore.subscribe((value) => {
+        console.log("combinedStore.value:", value);
     });
 
     const dispatch = createEventDispatcher();

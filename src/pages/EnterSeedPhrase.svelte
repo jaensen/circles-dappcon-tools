@@ -6,6 +6,10 @@
     export let privateKey = "";
     export let address = "";
     export let mnemonicPhrase: string = "";
+
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
 </script>
 
 <div class="hero min-h-screen bg-black">
@@ -33,11 +37,10 @@
                 {#if hasValidKey && address !== ""}
                     <button
                         on:click={() => {
-                            console.log("DACIAN");
                             jumpToAnchor("select-safe");
+                            dispatch("eoaLoaded", address);
                         }}
-                        class="btn btn-primary text-primary"
-                        >Proceed with address</button
+                        class="btn btn-primary">Proceed with address</button
                     >
                 {/if}
             </div>

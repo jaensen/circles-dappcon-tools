@@ -2,13 +2,13 @@
     import Safe, { Web3Adapter } from "@safe-global/protocol-kit";
     import { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
     import Web3 from "web3";
-    import { tcToCrc } from "@circles/timecircles";
-    import { getPath, PaymentPath } from "../api";
     import { HUB_ABI } from "../abis/hub";
     import { HoGTokenAddress, HubAddress } from "../consts";
     import { CirclesSafe } from "../models/circlesSafe";
     import { GROUP_CURRENCY_TOKEN_ABI } from "../abis/groupCurrencyToken";
     import { crcToTc } from "@jaensen/timecircles";
+    import { calculatePaymentPath } from "../api/calculatePaymentPath";
+    import type { PaymentPath } from "../models/paymentPath";
 
     export let web3: Web3;
     export let circlesSafe: CirclesSafe;
@@ -123,7 +123,7 @@
             tcAmount = crcToTc(Date.now(), mintAmount).toFixed(2);
 
             status = "Calculating collateral transfer path...";
-            const path = await getPath(
+            const path = await calculatePaymentPath(
                 circlesSafe.safeAddress,
                 HoGTokenAddress,
                 crcAmount

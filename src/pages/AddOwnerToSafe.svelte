@@ -11,6 +11,7 @@
     export let newOwnerAddress: string;
     export let currentOwnerAddresses: string[];
     export let selectedSafe: CirclesSafe;
+    export let anchorElementId = "AddOwnerToSafe";
 
     const dispatch = createEventDispatcher();
 

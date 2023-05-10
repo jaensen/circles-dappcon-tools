@@ -16,7 +16,7 @@
                     placeholder="0"
                     class="input input-bordered"
                 />
-                <span>HoG</span>
+                <span class="text-primary">HoG</span>
             </label>
         </div>
     </div>
