@@ -1,12 +1,12 @@
 <script lang="ts">
     import {createEventDispatcher, onMount} from "svelte";
     import {CirclesSafe} from "../models/circlesSafe";
-    import {getCrcBalance, getMaxFlow} from "../api";
     import {crcToTc} from "@jaensen/timecircles";
     import Web3 from "web3";
     import {createFindPaymentPath} from "../stores/factories/createFindPaymentPath";
     import {createFindCrcBalance} from "../stores/factories/createFindCrcBalance";
     import {createFindHoGBalance} from "../stores/factories/createFindHoGBalance";
+    import {createCombinedStore} from "../stores/factories/createCombinedStore";
 
     export let circlesSafe: CirclesSafe;
     export let toAddress: string;
@@ -17,6 +17,12 @@
     const paymentPathStore = createFindPaymentPath();
     const crcBalanceStore = createFindCrcBalance();
     const hogBalanceStore = createFindHoGBalance();
+
+    const combinedStore = createCombinedStore({
+          paymentPath: paymentPathStore
+        , crcBalance: crcBalanceStore
+        , hogBalance: hogBalanceStore
+    });
 
     onMount(async () => {
         if (circlesSafe?.safeAddress && toAddress) {
@@ -31,6 +37,10 @@
             crcBalanceStore.search({address: circlesSafe.safeAddress});
             hogBalanceStore.search({address: circlesSafe.safeAddress, web3: web3});
         }
+    });
+
+    combinedStore.subscribe((value) => {
+        console.log("combinedStore.value:", value);
     });
 
     const dispatch = createEventDispatcher();

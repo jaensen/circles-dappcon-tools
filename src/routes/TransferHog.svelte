@@ -12,7 +12,9 @@
                 <span class="label-text">Transfer amount</span>
             </label>
             <label class="input-group">
-                <input type="text" placeholder="0" class="input input-bordered"/>
+                <input type="text"
+                       placeholder="0"
+                       class="input input-bordered"/>
                 <span>HoG</span>
             </label>
         </div>

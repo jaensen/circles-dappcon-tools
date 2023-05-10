@@ -19,7 +19,7 @@
     ]
 
     const chains = [{
-        id: '0x1',
+        id: '0x64',
         token: 'XDAI',
         label: 'Gnosis Chain',
         rpcUrl: RpcEndpoint
@@ -39,7 +39,7 @@
         wallets,
         chains,
         appMetadata
-    })
+    });
 
     // Subscribe to wallet updates
     const wallets$ = onboard.state.select('wallets')
