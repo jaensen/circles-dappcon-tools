@@ -89,6 +89,7 @@
     }
 </script>
 
+<div id={anchorElementId} />
 <div class="hero min-h-screen bg-primary">
     <div class="hero-content text-center text-neutral-content">
         <div class="max-w-md">

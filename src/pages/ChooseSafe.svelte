@@ -47,7 +47,7 @@
                 <div class="flex-grow text-neutral-content">
                     <button
                         on:click={() => dispatcher("import")}
-                        class="w-1/3 btn btn-primary">Import</button
+                        class="w-1/3 btn btn-primary bg-blue">Import</button
                     >
                 </div>
             </a>
@@ -57,7 +57,7 @@
                 <div class="flex-grow text-neutral-content">
                     <button
                         on:click={() => dispatcher("signup")}
-                        class="w-1/3 btn btn-primary">Sign-up</button
+                        class="w-1/3 btn btn-primary bg-blue">Sign-up</button
                     >
                 </div>
             </a>
