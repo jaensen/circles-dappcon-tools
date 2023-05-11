@@ -4,7 +4,7 @@
     export let circlesSafe: CirclesSafe;
 </script>
 
-<a on:click class="w-full flex p-3">
+<a on:click class="flex p-3">
     <img
         class="flex-none w-12 h-full"
         src={circlesSafe.userAvatar ?? "/images/blank-avatar.png"}

@@ -35,9 +35,9 @@
     });
 </script>
 
-<div class="m-3 w-full">
+<div class="m-3 w-full flex flex-col items-center">
     <ul
-        class="w-full rounded-lg mt-2 mb-3 text-neutral-content flex justify-center"
+        class="w-full rounded-lg mt-2 mb-3 text-neutral-content flex justify-center flex-col items-center"
     >
         {#if !$findSafeByOwnerStore}
             <li class="text-center">Loading ...</li>
