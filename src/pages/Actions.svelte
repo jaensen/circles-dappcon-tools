@@ -3,6 +3,9 @@
     import { push } from "svelte-spa-router";
 </script>
 
+<div class="absolute py-2.5 px-5">
+    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
+</div>
 <div class="hero min-h-screen bg-black">
     <div />
     <div class="hero-content text-center text-neutral-content">

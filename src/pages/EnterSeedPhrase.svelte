@@ -6,12 +6,16 @@
     export let privateKey = "";
     export let address = "";
     export let mnemonicPhrase: string = "";
+    export let anchorElementId = "ChooseSafe";
 
     import { createEventDispatcher } from "svelte";
 
     const dispatch = createEventDispatcher();
 </script>
 
+<div class="absolute py-2.5 px-5">
+    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
+</div>
 <div class="hero min-h-screen bg-black">
     <div class="hero-content">
         <div>
@@ -38,7 +42,9 @@
                     <button
                         on:click={() => {
                             dispatch("eoaLoaded", address);
-                            jumpToAnchor("select-safe");
+                            document
+                                .getElementById(anchorElementId)
+                                .scrollIntoView();
                         }}
                         class="btn btn-primary">Proceed with address</button
                     >

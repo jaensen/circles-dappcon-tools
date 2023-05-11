@@ -24,7 +24,7 @@ module.exports = {
       },
       fontFamily: {
         primary: ["Averta", "sans"]
-      }
+      },
     }
   },
   plugins: [
