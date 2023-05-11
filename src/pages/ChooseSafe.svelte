@@ -13,13 +13,16 @@
     const dispatcher = createEventDispatcher();
 </script>
 
+<div class="absolute py-2.5 px-5">
+    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
+</div>
 <div id={anchorElementId} />
 <div
-    class="hero min-h-screen bg-blue mx-auto w-full flex flex-col justify-center select-safe"
+    class="hero min-h-screen bg-blue mx-auto w-full flex flex-col justify-center select-safe pt-[100px]"
 >
     <div class="w-full">
         <div class="text-center text-neutral-content">
-            <h1 class="mb-5 text-5xl font-bold text-primary">
+            <h1 class="mb-5 text-4xl font-bold text-primary">
                 Select your safe
             </h1>
             {#if circlesSafes && circlesSafes.length > 1}
@@ -35,7 +38,7 @@
                 </p>
             {/if}
         </div>
-        <div class="h-screen max-h-[50vh] overflow-y-auto mb-5">
+        <div class="h-screen max-h-[40vh] overflow-y-auto mb-5">
             <CirclesSafeList
                 bind:ownerAddress
                 bind:circlesSafes
