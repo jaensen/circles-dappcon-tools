@@ -17,7 +17,7 @@
 <div
     class="hero min-h-screen bg-blue mx-auto w-full flex flex-col justify-center select-safe"
 >
-    <div>
+    <div class="w-full">
         <div class="text-center text-neutral-content">
             <h1 class="mb-5 text-5xl font-bold text-primary">
                 Select your safe

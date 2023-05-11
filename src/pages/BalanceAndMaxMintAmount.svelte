@@ -7,6 +7,7 @@
     import { createFindPaymentPath } from "../stores/factories/createFindPaymentPath";
     import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
     import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
+    import { createCombinedStore } from "../stores/factories/createCombinedStore";
 
     export let circlesSafe: CirclesSafe;
     export let toAddress: string;
