@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {mnemonicToEntropy, validateMnemonic} from "bip39";
+    import { mnemonicToEntropy, validateMnemonic } from "bip39";
     import Web3 from "web3";
 
     export let isValidMnemonic: boolean = false;
@@ -24,7 +24,9 @@
         isValidMnemonic = validateMnemonic(phrase);
         if (isValidMnemonic) {
             const keyFromMnemonic = mnemonicToEntropy(phrase);
-            const wallet = new Web3().eth.accounts.privateKeyToAccount(keyFromMnemonic);
+            const wallet = new Web3().eth.accounts.privateKeyToAccount(
+                keyFromMnemonic
+            );
             mnemonicPhrase = phrase;
             address = wallet.address;
             privateKey = wallet.privateKey;
@@ -33,21 +35,24 @@
         }
     }
 </script>
+
 <div>
-<div class="flex flex-wrap">
-    {#each boxes as box, i}
-        <div class="form-control">
-            <label class="input-group m-4">
-                <span>{(i + 1).toString().padStart(2, "0")}</span>
-                <input type="text"
-                       class="input input-bordered w-36"
-                       class:text-error={!isValidMnemonic}
-                       class:text-success={isValidMnemonic}
-                       bind:value={boxes[i]}
-                       on:change={onInput}
-                       on:keyup={onInput} />
-            </label>
-        </div>
-    {/each}
-</div>
+    <div class="flex flex-wrap justify-center">
+        {#each boxes as box, i}
+            <div class="form-control">
+                <label class="input-group m-4">
+                    <span>{(i + 1).toString().padStart(2, "0")}</span>
+                    <input
+                        type="text"
+                        class="input input-bordered w-36 text-black color-black"
+                        class:text-error={!isValidMnemonic}
+                        class:text-success={isValidMnemonic}
+                        bind:value={boxes[i]}
+                        on:change={onInput}
+                        on:keyup={onInput}
+                    />
+                </label>
+            </div>
+        {/each}
+    </div>
 </div>
