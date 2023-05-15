@@ -38,7 +38,7 @@
                 </p>
             {/if}
         </div>
-        <div class="h-screen max-h-[40vh] overflow-y-auto mb-5">
+        <div class="h-screen max-h-[40vh] overflow-y-auto mb-5 w-full">
             <CirclesSafeList
                 bind:ownerAddress
                 bind:circlesSafes
