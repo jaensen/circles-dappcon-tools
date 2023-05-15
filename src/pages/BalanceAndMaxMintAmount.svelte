@@ -63,7 +63,7 @@
                 </p>
             {:else if $crcBalanceStore.result}
                 <p>Your Circles balance:</p>
-                <h1 class="mb-5 text-5xl font-bold">
+                <h1 class="mb-5 text-5xl text-primary">
                     {Math.floor(
                         crcToTc(
                             Date.now(),
@@ -111,7 +111,7 @@
                 </p>
             {:else if $paymentPathStore.result?.maxFlow}
                 <p class="text-primary">You can mint:</p>
-                <h2 class="mb-5 text-3xl font-bold">
+                <h2 class="mb-5 text-3xl text-primary">
                     {Math.floor(
                         Number.parseFloat(
                             web3.utils.fromWei(
@@ -123,10 +123,10 @@
                 </h2>
             {/if}
             {#if $paymentPathStore.result && $paymentPathStore?.result?.maxFlow}
-                <div class="form-control">
+                <div class="form-control items-center">
                     <input
                         type="number"
-                        class="input input-bordered w-full max-w-xs text-info mb-5"
+                        class="input input-bordered w-full max-w-xs text-blue mb-5 text-center"
                         placeholder="Amount"
                         min="0"
                         max={Math.floor(
@@ -141,7 +141,8 @@
                     />
                     <button
                         on:click={() => dispatch("mint", mintAmount)}
-                        class="btn btn-primary text-primary">Mint HoG</button
+                        class="btn btn-primary text-primary bg-blue"
+                        >Mint HoG</button
                     >
                 </div>
             {/if}
