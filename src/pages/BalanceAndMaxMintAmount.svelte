@@ -8,6 +8,7 @@
     import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
     import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
     import { createCombinedStore } from "../stores/factories/createCombinedStore";
+    import { push } from "svelte-spa-router";
 
     export let circlesSafe: CirclesSafe;
     export let toAddress: string;
@@ -126,7 +127,7 @@
                 <div class="form-control items-center">
                     <input
                         type="number"
-                        class="input input-bordered w-full max-w-xs text-info mb-5 text-primary text-center"
+                        class="input input-bordered w-full max-w-xs text-info mb-5 text-input text-center text-blue"
                         placeholder="Amount"
                         min="0"
                         max={Math.floor(
