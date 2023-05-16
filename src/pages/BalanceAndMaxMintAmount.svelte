@@ -14,6 +14,8 @@
     export let toAddress: string;
     export let web3: Web3;
 
+    const youMintAnchorElementId: string = "YouMint";
+
     let mintAmount: number;
 
     const paymentPathStore = createFindPaymentPath();
@@ -127,7 +129,7 @@
                 <div class="form-control items-center">
                     <input
                         type="number"
-                        class="input input-bordered w-full max-w-xs text-info mb-5 text-input text-center text-blue"
+                        class="input input-bordered w-full max-w-xs mb-5 text-input text-center text-blue"
                         placeholder="Amount"
                         min="0"
                         max={Math.floor(
@@ -141,7 +143,12 @@
                         bind:value={mintAmount}
                     />
                     <button
-                        on:click={() => dispatch("mint", mintAmount)}
+                        on:click={() => {
+                            dispatch("mint", mintAmount);
+                            document
+                                .getElementById(youMintAnchorElementId)
+                                .scrollIntoView();
+                        }}
                         class="btn btn-primary text-primary bg-blue"
                         >Mint HoG</button
                     >
