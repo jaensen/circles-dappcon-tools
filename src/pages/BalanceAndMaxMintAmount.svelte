@@ -126,7 +126,7 @@
                 <div class="form-control items-center">
                     <input
                         type="number"
-                        class="input input-bordered w-full max-w-xs text-info mb-5 text-primary"
+                        class="input input-bordered w-full max-w-xs text-info mb-5 text-primary text-center"
                         placeholder="Amount"
                         min="0"
                         max={Math.floor(
@@ -141,7 +141,8 @@
                     />
                     <button
                         on:click={() => dispatch("mint", mintAmount)}
-                        class="btn btn-primary text-primary">Mint HoG</button
+                        class="btn btn-primary text-primary bg-blue"
+                        >Mint HoG</button
                     >
                 </div>
             {/if}

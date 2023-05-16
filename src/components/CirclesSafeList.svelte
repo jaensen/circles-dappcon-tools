@@ -35,22 +35,22 @@
     });
 </script>
 
-<div class="m-3 w-full flex flex-col items-center">
-    <ul
-        class="w-full rounded-lg mt-2 mb-3 text-neutral-content flex justify-center flex-col items-center"
+<div class="flex flex-col items-center justify-center w-full">
+    <div
+        class="px-2 rounded-lg mt-2 mb-3 text-neutral-content flex justify-center flex-col items-center overflow-hidden w-screen"
     >
         {#if !$findSafeByOwnerStore}
-            <li class="text-center">Loading ...</li>
+            <div class="text-center">Loading ...</div>
         {:else if $findSafeByOwnerStore.result?.length === 0}
-            <li class="text-center">No results</li>
+            <div class="text-center">No results</div>
         {:else if $findSafeByOwnerStore.error}
-            <li class="text-center text-error">
+            <div class="text-center text-error">
                 {$findSafeByOwnerStore.error.message}
-            </li>
+            </div>
         {:else if $findSafeByOwnerStore.result?.length > 0}
             {#each $findSafeByOwnerStore.result as circlesSafe, i}
-                <li
-                    class="mb-2 overflow-hidden"
+                <div
+                    class="flex mb-5 w-full overflow-hidden max-w-[530px]"
                     class:cursor-pointer={canSelect}
                     class:bg-info={selectedSafe === circlesSafe}
                 >
@@ -58,8 +58,8 @@
                         on:click={() => onSafeSelected(circlesSafe)}
                         {circlesSafe}
                     />
-                </li>
+                </div>
             {/each}
         {/if}
-    </ul>
+    </div>
 </div>
