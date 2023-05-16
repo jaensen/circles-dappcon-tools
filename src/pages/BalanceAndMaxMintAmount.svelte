@@ -123,7 +123,7 @@
                 </h2>
             {/if}
             {#if $paymentPathStore.result && $paymentPathStore?.result?.maxFlow}
-                <div class="form-control">
+                <div class="form-control items-center">
                     <input
                         type="number"
                         class="input input-bordered w-full max-w-xs text-info mb-5 text-primary"
