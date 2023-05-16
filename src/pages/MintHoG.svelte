@@ -99,6 +99,27 @@
         };
     }
 
+    async function generateTransferMintedHoGToWalletCallData(
+        sourceSafeAddress:string,
+        targetWalletAddress:string,
+        mintAmount:string
+    ): Promise<MetaTransactionData> {
+        const hogContract = new web3.eth.Contract(GROUP_CURRENCY_TOKEN_ABI, HoGTokenAddress);
+        const transferData = hogContract.methods
+            .transfer(
+                targetWalletAddress,
+                mintAmount
+            )
+            .encodeABI();
+
+        return {
+            to: HoGTokenAddress,
+            value: "0",
+            data: transferData,
+            operation: 0,
+        };
+    }
+
     async function mintHoG(mintAmount: number) {
         try {
             isSuccess = false;
@@ -137,6 +158,14 @@
             status = "Generating mint call data...";
             safeTransactionData = safeTransactionData.concat([
                 await generateMintCallData(path),
+            ]);
+
+            status = "Generate transfer minted HoG to wallet call data...";
+            safeTransactionData = safeTransactionData.concat([
+                await generateTransferMintedHoGToWalletCallData(
+                    circlesSafe.safeAddress,
+                    circlesSafe.ownerAddress,
+                    crcAmount), // TODO: This won't work if the GC has fees
             ]);
 
             status = "Creating safe transaction...";
