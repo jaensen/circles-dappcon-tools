@@ -145,9 +145,11 @@
                     <button
                         on:click={() => {
                             dispatch("mint", mintAmount);
-                            document
-                                .getElementById(youMintAnchorElementId)
-                                .scrollIntoView();
+                            setTimeout(() => {
+                                document
+                                    .getElementById(youMintAnchorElementId)
+                                    .scrollIntoView();
+                            }, 30);
                         }}
                         class="btn btn-primary text-primary bg-blue"
                         >Mint HoG</button

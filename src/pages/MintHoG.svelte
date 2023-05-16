@@ -190,7 +190,7 @@
                 </h2>
             {/if}
             {#if status && status.trim() !== ""}
-                <div class="mb-8">
+                <div class="mb-4">
                     {#if !isError && !isSuccess}
                         <progress class="progress w-56" />
                     {/if}
@@ -198,17 +198,6 @@
                         {@html status}
                     </p>
                 </div>
-            {/if}
-            {#if status && status == '.<br/><a href="https://gnosisscan.io/tx/${transactionResult.hash}">Open on GnosisScan</a>' && transactionResult}
-                <button
-                    on:click={() => {
-                        window.location.href =
-                            "https://gnosisscan.io/tx/" +
-                            transactionResult.hash;
-                    }}
-                    class="btn btn-primary text-primary bg-black"
-                    >Open on GnosisScan</button
-                >
             {/if}
             {#if !isSuccess}
                 <div class="form-control items-center">
@@ -223,6 +212,19 @@
                 <p class="text-success text-primary">
                     Minting completed successfully.
                 </p>
+            {/if}
+            {#if isSuccess && transactionResult}
+                <button
+                    on:click={() => {
+                        window.open(
+                            "https://gnosisscan.io/tx/" +
+                                transactionResult.hash,
+                            "_blank"
+                        );
+                    }}
+                    class="btn btn-primary text-primary bg-black mt-4"
+                    >Open on GnosisScan</button
+                >
             {/if}
         </div>
         <!--
