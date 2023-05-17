@@ -20,13 +20,23 @@
                 You can do the following things with your Circles Safe:
             </p>
             <button
-                class="btn btn-primary mb-5 text-primary bg-black"
-                on:click={() => push("/mint-hog")}>Mint HoG</button
+                    class="btn btn-primary mb-5 text-primary bg-black"
+                    on:click={() => push("/mint-hog")}>Mint HoG</button
             ><br />
+            <button
+                    class="btn btn-primary mb-5 text-primary bg-black"
+                    on:click={() => push("/connect-circles-safe")}>Select different safe</button
+            ><br />
+            <button
+                    class="btn btn-primary mb-5 text-primary bg-black"
+                    on:click={() => push("/connect-wallet")}>Connect different wallet</button
+            ><br />
+            <!--
             <button
                 class="btn btn-primary mb-5 text-primary bg-black"
                 on:click={() => push("/transfer-hog")}>Transfer HoG</button
             ><br />
+            -->
         </div>
     </div>
 </div>

@@ -9,6 +9,7 @@
     import { crcToTc } from "@jaensen/timecircles";
     import { calculatePaymentPath } from "../api/calculatePaymentPath";
     import type { PaymentPath } from "../models/paymentPath";
+    import {push} from "svelte-spa-router";
 
     export let web3: Web3;
     export let circlesSafe: CirclesSafe;
@@ -244,15 +245,20 @@
             {/if}
             {#if isSuccess && transactionResult}
                 <button
-                    on:click={() => {
+                        on:click={() => {
                         window.open(
                             "https://gnosisscan.io/tx/" +
                                 transactionResult.hash,
                             "_blank"
                         );
                     }}
-                    class="btn btn-primary text-primary bg-black mt-4"
-                    >Open on GnosisScan</button
+                        class="btn btn-primary text-primary bg-black mt-4"
+                >Open on GnosisScan</button
+                ><br/>
+                <button
+                        on:click={() => push("/")}
+                        class="btn btn-primary text-primary bg-black mt-4"
+                >Back</button
                 >
             {/if}
         </div>
