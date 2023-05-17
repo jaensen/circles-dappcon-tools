@@ -102,10 +102,16 @@
                             Connected to {$connectedWallet?.label}
                         </div>
                         <button
-                            class="btn btn-secondary text-primary"
-                            on:click={() => {
+                                class="btn btn-secondary text-primary mb-5"
+                                on:click={() => {
                                 disconnect($connectedWallet);
                             }}>Disconnect</button
+                        ><br/>
+                        <button
+                                class="btn btn-primary text-primary"
+                                on:click={() => {
+                                    push('/connect-circles-safe')
+                            }}>Select safe</button
                         >
                     </div>
                 {:else}
