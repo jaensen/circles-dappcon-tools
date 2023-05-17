@@ -84,7 +84,9 @@
             {:else if done}
                 <p class="text-success">{status}</p>
             {:else}
-                <progress class="progress w-56" />
+                <div class="loader">
+                    <div class="loaderBar" />
+                </div>
                 <p class="text-info">{status}</p>
             {/if}
         </div>

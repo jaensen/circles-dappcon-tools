@@ -29,7 +29,9 @@
     <div class="hero-content text-center">
         <div>
             {#if !$hogBalanceStore.result}
-                <progress class="progress w-56" />
+                <div class="loader">
+                    <div class="loaderBar" />
+                </div>
                 <p class="text-info text-primary">
                     Loading your HoG balance ...
                 </p>

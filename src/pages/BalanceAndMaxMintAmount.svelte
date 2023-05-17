@@ -6,7 +6,9 @@
     import { createFindPaymentPath } from "../stores/factories/createFindPaymentPath";
     import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
     import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
-    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
+    import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
+    import { createCombinedStore } from "../stores/factories/createCombinedStore";
+    import { push } from "svelte-spa-router";
 
     export let circlesSafe: CirclesSafe;
     export let toAddress: string;
@@ -21,14 +23,13 @@
     const hogSafeBalanceStore = createFindHoGBalance();
     const hogWalletBalanceStore = createFindHoGBalance();
 
-    $:maxMintAmount = $paymentPathStore.result ? Math.floor(
-        Number.parseFloat(
-            web3.utils.fromWei(
-                $paymentPathStore.result.maxFlow,
-                "ether"
-            )
-        )
-    ) : 0;
+    $: maxMintAmount = $paymentPathStore.result
+        ? Math.floor(
+              Number.parseFloat(
+                  web3.utils.fromWei($paymentPathStore.result.maxFlow, "ether")
+              )
+          )
+        : 0;
 
     onMount(async () => {
         if (circlesSafe?.safeAddress && toAddress) {
@@ -61,7 +62,9 @@
     <div class="hero-content text-center text-neutral-content">
         <div>
             {#if !$crcBalanceStore.result}
-                <progress class="progress w-56" />
+                <div class="loader">
+                    <div class="loaderBar" />
+                </div>
                 <p class="text-info text-primary">
                     Loading your Circles balance ...
                 </p>
@@ -87,7 +90,9 @@
                 </p>
             {/if}
             {#if !$hogSafeBalanceStore.result || !$hogWalletBalanceStore.result}
-                <progress class="progress w-56" />
+                <div class="loader">
+                    <div class="loaderBar" />
+                </div>
                 <p class="text-info text-primary">
                     Loading your HoG balances ...
                 </p>
@@ -112,7 +117,9 @@
                 </p>
             {/if}
             {#if !$paymentPathStore.result}
-                <progress class="progress w-56 text-primary" />
+                <div class="loader">
+                    <div class="loaderBar" />
+                </div>
                 <p class="text-info text-primary">
                     Calculating your token minting limit ...
                 </p>
@@ -146,7 +153,8 @@
                         bind:value={mintAmount}
                     />
                     <button
-                        disabled={mintAmount > maxMintAmount && maxMintAmount > 0}
+                        disabled={mintAmount > maxMintAmount &&
+                            maxMintAmount > 0}
                         on:click={() => {
                             dispatch("mint", mintAmount);
                             setTimeout(() => {
@@ -156,7 +164,8 @@
                             }, 30);
                         }}
                         class="btn btn-primary text-primary bg-blue"
-                        >Mint HoG</button>
+                        >Mint HoG</button
+                    >
                 </div>
             {/if}
         </div>
