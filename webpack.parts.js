@@ -6,7 +6,6 @@ const {
   generateCSSReferences,
   generateJSReferences,
 } = require("mini-html-webpack-plugin");
-const { WebpackPluginServe } = require("webpack-plugin-serve");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -16,14 +15,22 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const sveltePreprocess = require("svelte-preprocess");
 
 exports.devServer = () => ({
-  watch: true,
-  plugins: [
-    new WebpackPluginServe({
-      port: 3000,
-      static: path.resolve(process.cwd(), "dist"),
-      historyFallback: true,
-    }),
-  ],
+  devServer: {
+    compress: false,
+    static: {
+      directory: path.resolve(process.cwd(), "dist"),
+    },
+    port: 3000,
+
+    open: true,
+    // client: {
+    //   webSocketURL: undefined,
+    //   overlay: {
+    //     errors: true,
+    //     warnings: false, // TODO: REMOVE THIS!!!
+    //   },
+    // },
+  },
 });
 
 exports.page = ({ title }) => ({
@@ -73,7 +80,7 @@ exports.page = ({ title }) => ({
             <title>${title}</title>
             ${cssTags}
           </head>
-          <body>
+          <body class="flex flex-col min-h-screen bg-black">
             ${jsTags}
           </body>
         </html>`;

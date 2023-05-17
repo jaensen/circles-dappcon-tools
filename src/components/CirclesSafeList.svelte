@@ -5,7 +5,7 @@
   import { CirclesSafe } from "../models/circlesSafe";
 
   export let ownerAddress: string = "";
-  export let selectedSafe: CirclesSafe;
+  export let selectedSafe: CirclesSafe = null;
   export let circlesSafes: CirclesSafe[];
   export let canSelect: boolean = true;
 

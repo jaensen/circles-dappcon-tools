@@ -8,6 +8,7 @@
   border: 1px solid #ffffff;
   border-radius: 30px;
   @apply px-8;
+  @apply text-primary;
 }
 .btn-sm {
   --scale: 1;
@@ -16,7 +17,7 @@
 .btn-outline:hover {
   background-color: initial;
   border: 2px solid #ffffff;
-  @apply text-white;
+  @apply text-primary;
 }
 
 .text-primary {

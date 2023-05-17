@@ -7,6 +7,7 @@
   import { push } from "svelte-spa-router";
   import { connectedWallet } from "../stores/singletons/connectedWallet";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
+  import Frame from "../components/Frame.svelte";
   import Web3 from "web3";
   import { web3 } from "../stores/singletons/web3";
 
@@ -77,50 +78,41 @@
   };
 </script>
 
-<div class="absolute py-2.5 px-5">
-  <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
-</div>
-<div class="flex h-screen px-5 bg-black">
-  <div class="m-auto text-center">
-    <div>
-      <div class="text-center text-neutral-content">
-        <h1 class="mb-2 text-5xl font-bold text-primary">
-          Connect your wallet
-        </h1>
-        <p class="mb-5 text-primary">
-          Connect the EOA you want to use to interact with your Circles account.
-        </p>
-      </div>
-      <div class="text-center text-neutral-content">
-        {#if $connectedWallet}
-          <div>
-            <div class="mb-5 text-xl font-bold text-primary">
-              {$connectedWalletAddress}
-            </div>
-            <div class="mb-5 font-bold text text-primary">
-              Connected to {$connectedWallet?.label}
-            </div>
-            <button
-              class="mb-5 btn btn-secondary text-primary"
-              on:click={() => {
-                disconnect($connectedWallet);
-              }}>Disconnect</button
-            ><br />
-            <button
-              class="btn btn-primary text-primary"
-              on:click={() => {
-                push("/connect-circles-safe");
-              }}>Select safe</button
-            >
+<Frame backgroundColor="bg-black">
+  <div>
+    <div class="text-center">
+      <h1 class="mb-2 text-5xl font-bold">Connect your wallet</h1>
+      <p class="mb-5">
+        Connect the EOA you want to use to interact with your Circles account.
+      </p>
+    </div>
+    <div class="text-center">
+      {#if $connectedWallet}
+        <div>
+          <div class="mb-5 text-sm font-bold sm:text-lg">
+            {$connectedWalletAddress}
           </div>
-        {:else}
-          <div>
-            <button on:click={connect} class="btn btn-outline text-primary"
-              >Connect</button
-            >
+          <div class="mb-5 font-bold text">
+            Connected to {$connectedWallet?.label}
           </div>
-        {/if}
-      </div>
+          <button
+            class="mb-5 btn btn-secondary"
+            on:click={() => {
+              disconnect($connectedWallet);
+            }}>Disconnect</button
+          ><br />
+          <button
+            class="btn btn-primary"
+            on:click={() => {
+              push("/connect-circles-safe");
+            }}>Select safe</button
+          >
+        </div>
+      {:else}
+        <div>
+          <button on:click={connect} class="btn btn-outline">Connect</button>
+        </div>
+      {/if}
     </div>
   </div>
-</div>
+</Frame>
