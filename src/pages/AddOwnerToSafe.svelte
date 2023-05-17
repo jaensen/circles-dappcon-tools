@@ -6,6 +6,8 @@
     import { CirclesSafe } from "../models/circlesSafe";
     import { createEventDispatcher } from "svelte";
     import { RpcEndpoint } from "../consts";
+    import {web3} from "../stores/singletons/web3";
+    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
 
     export let mnemonicPhrase: string;
     export let newOwnerAddress: string;
@@ -15,7 +17,7 @@
 
     const dispatch = createEventDispatcher();
 
-    let web3: Web3;
+    let importedKeyWeb3: Web3;
     let safeSdk: Safe;
 
     let working = false;
@@ -29,11 +31,11 @@
             privateKeys: [mnemonicToEntropy(mnemonicPhrase)],
             providerOrUrl: RpcEndpoint,
         });
-        web3 = new Web3(provider);
+        importedKeyWeb3 = new Web3(provider);
 
         status = `Initializing safe sdk ...`;
         const ethAdapter = new Web3Adapter({
-            web3,
+            web3: importedKeyWeb3,
             signerAddress: provider.getAddress(),
         });
 
@@ -57,6 +59,15 @@
         error = false;
         working = true;
         try {
+
+            status = "Sending 0.01 xDai to the imported EOA ...";
+            const fundTx = await $web3.eth.sendTransaction({
+                from: $connectedWalletAddress,
+                to: newOwnerAddress,
+                value: $web3.utils.toWei("0.01", "ether"),
+            });
+            console.log(fundTx.transactionHash)
+
             status = "Signing 'addOwner' transaction ...";
             const addOwnerTx = await safeSdk.createAddOwnerTx({
                 ownerAddress: newOwnerAddress,
@@ -117,7 +128,7 @@
                     <b>{newOwnerAddress}</b><br /> as owner of <br />
                     <b>{selectedSafe.safeAddress}</b>.
                 </p>
-                {#if web3}
+                {#if importedKeyWeb3}
                     {#if !working && !error}
                         <button
                             on:click={addOwnerToSafe}
