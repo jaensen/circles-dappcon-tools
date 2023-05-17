@@ -20,6 +20,10 @@
   @apply text-primary;
 }
 
+input {
+  @apply bg-white;
+}
+
 .text-primary {
   color: #ffffff;
   font-style: normal;
