@@ -136,7 +136,7 @@
         <div class="items-center form-control">
           <input
             type="number"
-            class="w-full max-w-xs mb-5 text-center input input-bordered text-input text-blue"
+            class="w-full max-w-xs mb-5 text-center bg-white input input-bordered text-input text-blue"
             placeholder="Amount"
             min="0"
             max={maxMintAmount}
