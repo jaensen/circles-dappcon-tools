@@ -1,9 +1,8 @@
-export function jumpToAnchor(anchor) {
-    const anchorElements = document.getElementsByTagName("a");
-    const anchorElement = Array.from(anchorElements).find((o) => o.name === anchor);
-    if (anchorElement) {
-        anchorElement.scrollIntoView({ behavior: "smooth" });
-        document.location.hash = anchor;
+export function jumpToAnchor(className) {
+    const element = document.querySelector(`.${className}`);
+    if (element) {
+        const topOffset = element.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({ top: topOffset, behavior: 'smooth' });
     }
 }
 //# sourceMappingURL=utils.js.map

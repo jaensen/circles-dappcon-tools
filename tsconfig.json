@@ -8,8 +8,6 @@
     "public/*"
   ],
   "compilerOptions": {
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "resolveJsonModule": true
   }
 }

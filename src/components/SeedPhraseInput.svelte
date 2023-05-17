@@ -44,7 +44,7 @@
                     <span>{(i + 1).toString().padStart(2, "0")}</span>
                     <input
                         type="text"
-                        class="input input-bordered w-36 text-black color-black"
+                        class="input input-bordered w-36 text-black text-input"
                         class:text-error={!isValidMnemonic}
                         class:text-success={isValidMnemonic}
                         bind:value={boxes[i]}
