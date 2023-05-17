@@ -1,21 +1,27 @@
 <script lang="ts">
-    import { CirclesSafe } from "../../models/circlesSafe";
+  import { type CirclesSafe } from "../../models/circlesSafe";
 
-    export let circlesSafe: CirclesSafe;
+  export let circlesSafe: CirclesSafe;
 </script>
 
-<div on:click class="flex truncate">
-    <div class="shrink-0 mr-2.5">
-        <img
-            class="w-12 h-auto"
-            src={circlesSafe.userAvatar ?? "/images/blank-avatar.png"}
-            alt="user avatar"
-        />
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div on:click class="flex truncate text-primary">
+  <div class="shrink-0 mr-2.5">
+    <img
+      class="w-12 h-auto"
+      src={circlesSafe.userAvatar ?? "/images/blank-avatar.png"}
+      alt="user avatar"
+    />
+  </div>
+  <div>
+    <div class="block ml-2 break-all sm:hidden text-md sm:text-xl">
+      {circlesSafe.safeAddress.slice(0, 18) + "..."}
     </div>
-    <div class="grow text-neutral-content truncate">
-        <div class="text-xl ml-2 truncate">{circlesSafe.safeAddress}</div>
-        <div class="text-sm ml-2 truncate">
-            {circlesSafe.userName ?? "no username"}
-        </div>
+    <div class="hidden ml-2 break-all sm:block text-md sm:text-xl">
+      {circlesSafe.safeAddress}
     </div>
+    <div class="ml-2 text-sm text-left truncate text-neutral-content">
+      {circlesSafe.userName ?? "no username"}
+    </div>
+  </div>
 </div>
