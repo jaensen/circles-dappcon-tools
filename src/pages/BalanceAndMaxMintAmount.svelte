@@ -8,22 +8,21 @@
     import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
     import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
     import { createCombinedStore } from "../stores/factories/createCombinedStore";
+    import { push } from "svelte-spa-router";
+    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
 
     export let circlesSafe: CirclesSafe;
     export let toAddress: string;
     export let web3: Web3;
 
+    const youMintAnchorElementId: string = "YouMint";
+
     let mintAmount: number;
 
     const paymentPathStore = createFindPaymentPath();
     const crcBalanceStore = createFindCrcBalance();
-    const hogBalanceStore = createFindHoGBalance();
-
-    const combinedStore = createCombinedStore({
-        paymentPath: paymentPathStore,
-        crcBalance: crcBalanceStore,
-        hogBalance: hogBalanceStore,
-    });
+    const hogSafeBalanceStore = createFindHoGBalance();
+    const hogWalletBalanceStore = createFindHoGBalance();
 
     onMount(async () => {
         if (circlesSafe?.safeAddress && toAddress) {
@@ -36,17 +35,16 @@
         }
         if (circlesSafe?.safeAddress) {
             crcBalanceStore.search({ address: circlesSafe.safeAddress });
-            hogBalanceStore.search({
+            hogSafeBalanceStore.search({
                 address: circlesSafe.safeAddress,
+                web3: web3,
+            });
+            hogWalletBalanceStore.search({
+                address: $connectedWalletAddress,
                 web3: web3,
             });
         }
     });
-
-    combinedStore.subscribe((value) => {
-        console.log("combinedStore.value:", value);
-    });
-
     const dispatch = createEventDispatcher();
 </script>
 
@@ -62,8 +60,8 @@
                     Loading your Circles balance ...
                 </p>
             {:else if $crcBalanceStore.result}
-                <p>Your Circles balance:</p>
-                <h1 class="mb-5 text-5xl text-primary">
+                <p class="text-primary">Your Circles balance:</p>
+                <h1 class="mb-5 text-5xl font-bold text-primary">
                     {Math.floor(
                         crcToTc(
                             Date.now(),
@@ -82,20 +80,25 @@
                     {$crcBalanceStore.error.message}
                 </p>
             {/if}
-            {#if !$hogBalanceStore.result}
+            {#if !$hogSafeBalanceStore.result || !$hogWalletBalanceStore.result}
                 <progress class="progress w-56" />
                 <p class="text-info text-primary">
-                    Loading your HoG balance ...
+                    Loading your HoG balances ...
                 </p>
-            {:else if $hogBalanceStore.result}
-                <p>Your HoG balance:</p>
+            {:else if $hogSafeBalanceStore.result && $hogWalletBalanceStore.result}
+                <p class="text-primary">Your HoG balance (Safe):</p>
                 <h1 class="mb-5 text-5xl font-bold text-primary">
-                    {$hogBalanceStore.result} HoG
+                    {$hogSafeBalanceStore.result} HoG
                 </h1>
-            {:else if $hogBalanceStore.error}
+                <p class="text-primary">Your HoG balance (Wallet):</p>
+                <h1 class="mb-5 text-5xl font-bold text-primary">
+                    {$hogWalletBalanceStore.result} HoG
+                </h1>
+            {:else if $hogSafeBalanceStore.error || $hogWalletBalanceStore.error}
                 <p class="text-error text-primary">
                     An error occurred while loading your HoG balance:<br />
-                    {$hogBalanceStore.error.message}
+                    {$hogSafeBalanceStore.error?.message ?? ""}
+                    {$hogWalletBalanceStore.error?.message ?? ""}
                 </p>
             {/if}
             {#if !$paymentPathStore.result}
@@ -111,7 +114,7 @@
                 </p>
             {:else if $paymentPathStore.result?.maxFlow}
                 <p class="text-primary">You can mint:</p>
-                <h2 class="mb-5 text-3xl text-primary">
+                <h2 class="mb-5 text-3xl font-bold text-primary">
                     {Math.floor(
                         Number.parseFloat(
                             web3.utils.fromWei(
@@ -126,7 +129,7 @@
                 <div class="form-control items-center">
                     <input
                         type="number"
-                        class="input input-bordered w-full max-w-xs text-blue mb-5 text-center"
+                        class="input input-bordered w-full max-w-xs mb-5 text-input text-center text-blue"
                         placeholder="Amount"
                         min="0"
                         max={Math.floor(
@@ -140,7 +143,14 @@
                         bind:value={mintAmount}
                     />
                     <button
-                        on:click={() => dispatch("mint", mintAmount)}
+                        on:click={() => {
+                            dispatch("mint", mintAmount);
+                            setTimeout(() => {
+                                document
+                                    .getElementById(youMintAnchorElementId)
+                                    .scrollIntoView();
+                            }, 30);
+                        }}
                         class="btn btn-primary text-primary bg-blue"
                         >Mint HoG</button
                     >

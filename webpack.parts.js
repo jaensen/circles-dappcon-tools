@@ -14,7 +14,7 @@ exports.devServer = () => ({
     watch: true,
     plugins: [
         new WebpackPluginServe({
-            port: 5000,
+            port: 3000,
             static: path.resolve(process.cwd(), 'dist'),
             historyFallback: true
         })
@@ -22,7 +22,7 @@ exports.devServer = () => ({
 })
 
 exports.page = ({ title }) => ({
-    plugins: [new MiniHtmlWebpackPlugin({ publicPath: '/', context: { title } })]
+    plugins: [new MiniHtmlWebpackPlugin({ publicPath: '/', filename: './index.html', context: { title }, meta: { viewport: 'width=device-width, initial-scale=1.0,maximum-scale=1.0,shrink-to-fit=no,user-scalable=no,height=device-height' } })]
 })
 
 exports.generateSourceMaps = ({ type }) => ({ devtool: type })

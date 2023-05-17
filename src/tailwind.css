@@ -1,3 +1,5 @@
+@import "./fonts.css";
+
 .btn {
     box-sizing: border-box;
     height: 35px;
@@ -18,5 +20,11 @@
     color: #FFFFFF;
     font-style: normal;
     font-weight: 400;
-    font-family: 'Averta';
+    font-family: 'Averta Regular';
+}
+
+.text-input {
+    font-style: normal;
+    font-weight: 400;
+    font-family: 'Averta Regular';
 }

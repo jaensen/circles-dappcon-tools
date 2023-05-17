@@ -13,6 +13,7 @@
     export let web3: Web3;
     export let circlesSafe: CirclesSafe;
     export let mintAmount: number;
+    export let anchorElementId = "YouMint";
 
     let status: string;
     let isMinting: boolean;
@@ -20,6 +21,7 @@
     let isSuccess: boolean;
     let crcAmount: string;
     let tcAmount: string;
+    let transactionResult;
 
     $: {
         if (mintAmount) {
@@ -179,11 +181,11 @@
             );
 
             status = "Sending safe transaction...";
-            const transactionResult = await safe.executeTransaction(
+            transactionResult = await safe.executeTransaction(
                 signedSafeTransaction
             );
 
-            status = `Safe transaction sent.<br/><a href="https://gnosisscan.io/tx/${transactionResult.hash}">Open on GnosisScan</a>`;
+            status = `Safe transaction sent`;
             isMinting = false;
             isSuccess = true;
         } catch (e) {
@@ -200,7 +202,8 @@
 <div class="absolute py-2.5 px-5">
     <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
 </div>
-<div class="hero min-h-screen bg-primary">
+<div id={anchorElementId} />
+<div class="hero min-h-screen bg-black">
     <div class="hero-content text-center text-neutral-content">
         <div>
             {#if mintAmount && crcAmount && tcAmount}
@@ -216,19 +219,21 @@
                 </h2>
             {/if}
             {#if status && status.trim() !== ""}
-                {#if !isError && !isSuccess}
-                    <progress class="progress w-56" />
-                {/if}
-                <p class:text-info={!isError} class:text-error={isError}>
-                    {@html status}
-                </p>
+                <div class="mb-4">
+                    {#if !isError && !isSuccess}
+                        <progress class="progress w-56" />
+                    {/if}
+                    <p class:text-info={!isError} class:text-error={isError}>
+                        {@html status}
+                    </p>
+                </div>
             {/if}
             {#if !isSuccess}
-                <div class="form-control">
+                <div class="form-control items-center">
                     <button
                         disabled={isMinting}
                         on:click={() => mintHoG(mintAmount)}
-                        class="btn btn-primary text-primary"
+                        class="btn btn-primary text-primary bg-black"
                         >{!isError ? "" : "Retry: "}Mint HoG</button
                     >
                 </div>
@@ -236,6 +241,19 @@
                 <p class="text-success text-primary">
                     Minting completed successfully.
                 </p>
+            {/if}
+            {#if isSuccess && transactionResult}
+                <button
+                    on:click={() => {
+                        window.open(
+                            "https://gnosisscan.io/tx/" +
+                                transactionResult.hash,
+                            "_blank"
+                        );
+                    }}
+                    class="btn btn-primary text-primary bg-black mt-4"
+                    >Open on GnosisScan</button
+                >
             {/if}
         </div>
         <!--
