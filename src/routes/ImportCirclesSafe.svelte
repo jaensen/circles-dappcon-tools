@@ -19,12 +19,16 @@
 
     function onSafeSelected(safe: CirclesSafe) {
         selectedSafe.set(safe);
-        document.getElementById(addOwnerAnchorElementId).scrollIntoView();
+        setTimeout(() => {
+            document.getElementById(addOwnerAnchorElementId).scrollIntoView();
+        }, 10);
     }
 
     function onEoaLoaded(event) {
         // const eoaAddress = event.detail;
-        document.getElementById(chooseSafeAnchorElementId).scrollIntoView();
+        setTimeout(() => {
+            document.getElementById(chooseSafeAnchorElementId).scrollIntoView();
+        }, 10);
     }
 
     function onAddOwnerSuccess(event) {

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { selectedSafe } from "../stores/singletons/selectedSafe";
     import { push } from "svelte-spa-router";
+    import HoGBalance from "./HoGBalance.svelte";
+    import {web3} from "../stores/singletons/web3";
 </script>
 
 <div class="absolute py-2.5 px-5">
@@ -16,6 +18,7 @@
                     ? $selectedSafe.safeAddress
                     : $selectedSafe.userName}!
             </h1>
+            <HoGBalance web3={$web3} circlesSafe={$selectedSafe} />
             <p class="mb-5 text-primary">
                 You can do the following things with your Circles Safe:
             </p>

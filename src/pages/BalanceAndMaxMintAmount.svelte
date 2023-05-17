@@ -97,13 +97,13 @@
                     Loading your HoG balances ...
                 </p>
             {:else if $hogSafeBalanceStore.result && $hogWalletBalanceStore.result}
-                {#if $hogSafeBalanceStore.result !== "0"}
+                {#if $hogSafeBalanceStore.result !== "0.00"}
                     <p class="text-primary">Your HoG balance (Safe):</p>
                     <h1 class="mb-5 text-5xl font-bold text-primary">
                         {$hogSafeBalanceStore.result} HoG
                     </h1>
                 {/if}
-                {#if $hogWalletBalanceStore.result !== "0"}
+                {#if $hogWalletBalanceStore.result !== "0.00"}
                     <p class="text-primary">Your HoG balance (Wallet):</p>
                     <h1 class="mb-5 text-5xl font-bold text-primary">
                         {$hogWalletBalanceStore.result} HoG

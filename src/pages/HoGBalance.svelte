@@ -1,85 +1,89 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
+    import { onMount } from "svelte";
     import { CirclesSafe } from "../models/circlesSafe";
+    import { crcToTc } from "@jaensen/timecircles";
+    import Web3 from "web3";
+    import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
     import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
-    import { web3 } from "../stores/singletons/web3";
-    import { connectedWalletAddress } from "src/stores/singletons/connectedWalletAddress";
+    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
 
     export let circlesSafe: CirclesSafe;
+    export let web3: Web3;
 
-    let sendTo: string = $connectedWalletAddress;
+    const crcBalanceStore = createFindCrcBalance();
+    const hogSafeBalanceStore = createFindHoGBalance();
+    const hogWalletBalanceStore = createFindHoGBalance();
 
-    const hogBalanceStore = createFindHoGBalance();
-    $: {
+    onMount(async () => {
         if (circlesSafe?.safeAddress) {
-            hogBalanceStore.search({
+            crcBalanceStore.search({ address: circlesSafe.safeAddress });
+            hogSafeBalanceStore.search({
                 address: circlesSafe.safeAddress,
-                web3: $web3,
+                web3: web3,
             });
         }
-    }
-
-    const dispatch = createEventDispatcher();
+        if ($connectedWalletAddress) {
+            hogWalletBalanceStore.search({
+                address: $connectedWalletAddress,
+                web3: web3,
+            });
+        }
+    });
 </script>
-
-<div class="absolute py-2.5 px-5">
-    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
-</div>
-<div class="hero min-h-screen bg-blue">
-    <div class="hero-content text-center">
-        <div>
-            {#if !$hogBalanceStore.result}
-                <div class="loader">
-                    <div class="loaderBar" />
-                </div>
-                <p class="text-info text-primary">
-                    Loading your HoG balance ...
-                </p>
-            {:else if $hogBalanceStore.result}
-                <p class="text-neutral-content text-primary">
-                    Your HoG balance:
-                </p>
-                <h1
-                    class="mb-5 text-5xl font-bold text-neutral-content text-primary"
-                >
-                    {$hogBalanceStore.result} HoG
-                </h1>
-            {:else if $hogBalanceStore.error}
-                <p class="text-error text-primary">
-                    An error occurred while loading your HoG balance:<br />
-                    {$hogBalanceStore.error.message}
-                </p>
-            {/if}
-            <div class="form-control mb-5">
-                <p class="text-neutral-content text-primary">
-                    Transfer amount:
-                </p>
-                <label class="input-group">
-                    <input
-                        type="text"
-                        placeholder="0"
-                        class="input input-bordered"
-                    />
-                    <span class="text-primary">HoG</span>
-                </label>
-            </div>
-            <div class="form-control mb-5">
-                <p class="text-neutral-content text-primary">Transfer to:</p>
-                <input
-                    type="text"
-                    placeholder="0x..."
-                    bind:value={sendTo}
-                    class="input input-bordered"
-                />
-            </div>
-            <div class="form-control mb-5">
-                <button
-                    class="btn btn-primary mb-5 text-primary bg-blue"
-                    on:click={() => {
-                        console.log("sendTo", sendTo);
-                    }}>Send</button
-                ><br />
-            </div>
+<div>
+    {#if !$crcBalanceStore.result}
+        <div class="loader">
+            <div class="loaderBar" />
         </div>
-    </div>
+        <p class="text-info text-primary">
+            Loading your Circles balance ...
+        </p>
+    {:else if $crcBalanceStore.result}
+        <p class="text-primary">Your Circles balance:</p>
+        <h1 class="mb-5 text-5xl font-bold text-primary">
+            {Math.floor(
+                crcToTc(
+                    Date.now(),
+                    Number.parseFloat(
+                        Web3.utils.fromWei(
+                            $crcBalanceStore.result,
+                            "ether"
+                        )
+                    )
+                )
+            )} Circles
+        </h1>
+    {:else if $crcBalanceStore.error}
+        <p class="text-error text-primary">
+            An error occurred while loading your Circles balance:<br />
+            {$crcBalanceStore.error.message}
+        </p>
+    {/if}
+    {#if $connectedWalletAddress && (!$hogSafeBalanceStore.result || !$hogWalletBalanceStore.result)}
+        <div class="loader">
+            <div class="loaderBar" />
+        </div>
+        <p class="text-info text-primary">
+            Loading your HoG balances ...
+        </p>
+    {:else if $connectedWalletAddress && ($hogSafeBalanceStore.result && $hogWalletBalanceStore.result)}
+        {#if $hogSafeBalanceStore.result !== "0.00"}
+            <p class="text-primary">Your HoG balance (Safe):</p>
+            <h1 class="mb-5 text-5xl font-bold text-primary">
+                {$hogSafeBalanceStore.result} HoG
+            </h1>
+        {/if}
+        {#if $hogWalletBalanceStore.result !== "0.00"}
+            <p class="text-primary">Your HoG balance (Wallet):</p>
+            <h1 class="mb-5 text-5xl font-bold text-primary">
+                {$hogWalletBalanceStore.result} HoG
+            </h1>
+        {/if}
+    {:else if $hogSafeBalanceStore.error || $hogWalletBalanceStore.error}
+        <p class="text-error text-primary">
+            An error occurred while loading your HoG balance:<br />
+            {$hogSafeBalanceStore.error?.message ?? ""}
+            {$hogWalletBalanceStore.error?.message ?? ""}
+        </p>
+    {/if}
 </div>
