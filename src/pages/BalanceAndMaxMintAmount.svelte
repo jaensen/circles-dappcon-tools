@@ -1,14 +1,11 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
     import { CirclesSafe } from "../models/circlesSafe";
-    import { getCrcBalance, getMaxFlow } from "../api";
     import { crcToTc } from "@jaensen/timecircles";
     import Web3 from "web3";
     import { createFindPaymentPath } from "../stores/factories/createFindPaymentPath";
     import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
     import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
-    import { createCombinedStore } from "../stores/factories/createCombinedStore";
-    import { push } from "svelte-spa-router";
     import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
 
     export let circlesSafe: CirclesSafe;
@@ -23,6 +20,15 @@
     const crcBalanceStore = createFindCrcBalance();
     const hogSafeBalanceStore = createFindHoGBalance();
     const hogWalletBalanceStore = createFindHoGBalance();
+
+    $:maxMintAmount = $paymentPathStore.result ? Math.floor(
+        Number.parseFloat(
+            web3.utils.fromWei(
+                $paymentPathStore.result.maxFlow,
+                "ether"
+            )
+        )
+    ) : 0;
 
     onMount(async () => {
         if (circlesSafe?.safeAddress && toAddress) {
@@ -86,14 +92,18 @@
                     Loading your HoG balances ...
                 </p>
             {:else if $hogSafeBalanceStore.result && $hogWalletBalanceStore.result}
-                <p class="text-primary">Your HoG balance (Safe):</p>
-                <h1 class="mb-5 text-5xl font-bold text-primary">
-                    {$hogSafeBalanceStore.result} HoG
-                </h1>
-                <p class="text-primary">Your HoG balance (Wallet):</p>
-                <h1 class="mb-5 text-5xl font-bold text-primary">
-                    {$hogWalletBalanceStore.result} HoG
-                </h1>
+                {#if $hogSafeBalanceStore.result !== "0"}
+                    <p class="text-primary">Your HoG balance (Safe):</p>
+                    <h1 class="mb-5 text-5xl font-bold text-primary">
+                        {$hogSafeBalanceStore.result} HoG
+                    </h1>
+                {/if}
+                {#if $hogWalletBalanceStore.result !== "0"}
+                    <p class="text-primary">Your HoG balance (Wallet):</p>
+                    <h1 class="mb-5 text-5xl font-bold text-primary">
+                        {$hogWalletBalanceStore.result} HoG
+                    </h1>
+                {/if}
             {:else if $hogSafeBalanceStore.error || $hogWalletBalanceStore.error}
                 <p class="text-error text-primary">
                     An error occurred while loading your HoG balance:<br />
@@ -132,17 +142,11 @@
                         class="input input-bordered w-full max-w-xs mb-5 text-input text-center text-blue"
                         placeholder="Amount"
                         min="0"
-                        max={Math.floor(
-                            Number.parseFloat(
-                                web3.utils.fromWei(
-                                    $paymentPathStore.result.maxFlow,
-                                    "ether"
-                                )
-                            )
-                        )}
+                        max={maxMintAmount}
                         bind:value={mintAmount}
                     />
                     <button
+                        disabled={mintAmount > maxMintAmount && maxMintAmount > 0}
                         on:click={() => {
                             dispatch("mint", mintAmount);
                             setTimeout(() => {
@@ -152,8 +156,7 @@
                             }, 30);
                         }}
                         class="btn btn-primary text-primary bg-blue"
-                        >Mint HoG</button
-                    >
+                        >Mint HoG</button>
                 </div>
             {/if}
         </div>

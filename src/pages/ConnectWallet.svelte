@@ -18,7 +18,7 @@
     const chains = [
         {
             id: "0x64",
-            token: "XDAI",
+            token: "xDai",
             label: "Gnosis Chain",
             rpcUrl: RpcEndpoint,
         },
