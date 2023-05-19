@@ -14,6 +14,7 @@ export type PaymentPathTransfer = {
 export type PaymentPath = {
     requestedAmount: string,
     maxFlow: string,
+    isValid: boolean,
     path: PaymentPathTransfer[]
 };
 
@@ -27,6 +28,7 @@ export type PaymentPathSearchArgs = {
 export const EmptyPath: PaymentPath = {
     requestedAmount: "0",
     maxFlow: "0",
+    isValid: false,
     path: []
 }
 
@@ -80,10 +82,12 @@ export const createFindPaymentPath = () => createLiveSearchStore<PaymentPathSear
     const requestedAmount = flowResponseJson.data?.directPath?.requestedAmount;
     const maxFlow = flowResponseJson.data?.directPath?.flow;
     const path = flowResponseJson.data?.directPath?.transfers;
+    const isValid = flowResponseJson.data?.directPath?.isValid;
 
     return <PaymentPath>{
         requestedAmount: requestedAmount ? requestedAmount : "0",
         maxFlow: maxFlow ? maxFlow : "0",
-        path: path ? path : []
+        path: path ? path : [],
+        isValid: isValid
     };
 }, undefined);
