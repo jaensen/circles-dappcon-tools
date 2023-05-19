@@ -141,13 +141,12 @@
             bind:value={mintAmount}
           />
           <button
-            disabled={mintAmount > maxMintAmount && maxMintAmount > 0}
+            disabled={!mintAmount || mintAmount <= 0 || maxMintAmount == 0 || mintAmount > maxMintAmount}
             on:click={() => {
               dispatch("mint", mintAmount);
               setTimeout(() => {
-                document
-                  .getElementById(youMintAnchorElementId)
-                  .scrollIntoView();
+                document.getElementById(youMintAnchorElementId)
+                        .scrollIntoView();
               }, 30);
             }}
             class="btn btn-primary text-primary bg-blue">Mint HoG</button
