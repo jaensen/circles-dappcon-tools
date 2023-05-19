@@ -1,62 +1,60 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-  import { CirclesSafe } from "../models/circlesSafe";
-  import { crcToTc } from "@jaensen/timecircles";
-  import Web3 from "web3";
-  import { createFindPaymentPath } from "../stores/factories/createFindPaymentPath";
-  import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
-  import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
-  import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
-  import { createCombinedStore } from "../stores/factories/createCombinedStore";
-  import { push } from "svelte-spa-router";
+    import { createEventDispatcher, onMount } from "svelte";
+    import { CirclesSafe } from "../models/circlesSafe";
+    import { crcToTc } from "@jaensen/timecircles";
+    import Web3 from "web3";
+    import { createFindPaymentPath } from "../stores/factories/createFindPaymentPath";
+    import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
+    import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
+    import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
 
-  export let circlesSafe: CirclesSafe;
-  export let toAddress: string;
-  export let web3: Web3;
+    export let circlesSafe: CirclesSafe;
+    export let toAddress: string;
+    export let web3: Web3;
 
-  const youMintAnchorElementId: string = "YouMint";
+    const youMintAnchorElementId: string = "YouMint";
 
-  let mintAmount: number;
+    let mintAmount: number;
 
-  const paymentPathStore = createFindPaymentPath();
-  const crcBalanceStore = createFindCrcBalance();
-  const hogSafeBalanceStore = createFindHoGBalance();
-  const hogWalletBalanceStore = createFindHoGBalance();
+    const paymentPathStore = createFindPaymentPath();
+    const crcBalanceStore = createFindCrcBalance();
+    const hogSafeBalanceStore = createFindHoGBalance();
+    const hogWalletBalanceStore = createFindHoGBalance();
 
-  $: maxMintAmount = $paymentPathStore.result
-    ? Math.floor(
-        Number.parseFloat(
-          web3.utils.fromWei($paymentPathStore.result.maxFlow, "ether")
+    $: maxMintAmount = $paymentPathStore.result
+        ? Math.floor(
+            Number.parseFloat(
+                web3?.utils.fromWei($paymentPathStore.result.maxFlow, "ether") ?? "0"
+            )
         )
-      )
-    : 0;
+        : 0;
 
-  onMount(async () => {
-    if (circlesSafe?.safeAddress && toAddress) {
-      paymentPathStore.search({
-        from: circlesSafe.safeAddress,
-        to: toAddress,
-        amount: "99999999999999999000000000000000000",
-        web3: web3,
-      });
-    }
-    if (circlesSafe?.safeAddress) {
-      crcBalanceStore.search({ address: circlesSafe.safeAddress });
-      hogSafeBalanceStore.search({
-        address: circlesSafe.safeAddress,
-        web3: web3,
-      });
-      hogWalletBalanceStore.search({
-        address: $connectedWalletAddress,
-        web3: web3,
-      });
-    }
-  });
-  const dispatch = createEventDispatcher();
+    onMount(async () => {
+        if (circlesSafe?.safeAddress && toAddress) {
+            paymentPathStore.search({
+                from: circlesSafe.safeAddress,
+                to: toAddress,
+                amount: "99999999999999999000000000000000000",
+                web3: web3,
+            });
+        }
+        if (circlesSafe?.safeAddress) {
+            crcBalanceStore.search({ address: circlesSafe.safeAddress });
+            hogSafeBalanceStore.search({
+                address: circlesSafe.safeAddress,
+                web3: web3,
+            });
+            hogWalletBalanceStore.search({
+                address: $connectedWalletAddress,
+                web3: web3,
+            });
+        }
+    });
+    const dispatch = createEventDispatcher();
 </script>
 
 <div class="absolute py-2.5 px-5">
-  <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
+    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
 </div>
 <div class="min-h-screen hero bg-blue">
   <div class="text-center hero-content text-neutral-content">

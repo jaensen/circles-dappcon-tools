@@ -41,13 +41,14 @@ export function createLiveSearchStore<TArg, TResult>(
         }
     }
 
-    async function search(searchArg: TArg) {
+    function search(searchArg: TArg) {
         buffer = searchArg;
 
         if (!executing) {
             const nextArg = buffer;
             buffer = undefined;
-            executeSearch(nextArg);
+            executeSearch(nextArg)
+                .catch(console.error);
         }
     }
 

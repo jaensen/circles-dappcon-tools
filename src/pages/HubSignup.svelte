@@ -41,17 +41,28 @@
       status = `Executing safe transaction ...`;
       const transactionResult = await safe.executeTransaction(signedTx);
 
-      status = `Signed up!`;
-      dispatch("signupCompleted", transactionResult);
-      push("/");
-      done = true;
-    } catch (e) {
-      status = `Error: ${e.message}`;
-      error = true;
-    } finally {
-      working = false;
+    if (transactionResult && transactionResult.promiEvent) {
+        status = `Waiting for hub signup to be mined ...`;
+        const receipt = await transactionResult.promiEvent;
+        console.log(receipt);
     }
-  }
+            if (transactionResult && transactionResult.promiEvent) {
+                status = `Waiting for hub signup to be mined ...`;
+                const receipt = await transactionResult.promiEvent;
+                console.log(receipt);
+            }
+
+            status = `Signed up!`;
+            dispatch("signupCompleted", transactionResult);
+            push("/");
+            done = true;
+        } catch (e) {
+            status = `Error: ${e.message}`;
+            error = true;
+        } finally {
+            working = false;
+        }
+    }
 </script>
 
 <Frame>
