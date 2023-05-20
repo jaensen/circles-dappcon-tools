@@ -12,6 +12,7 @@
     import { selectedSafe } from "./stores/singletons/selectedSafe";
     import { connectedWalletAddress } from "./stores/singletons/connectedWalletAddress";
     import MintCrc from "./routes/MintCrc.svelte";
+    import Frame from "./components/Frame.svelte";
 
     const routes = {
         "/": Home,
@@ -72,4 +73,6 @@
     }
 </script>
 
-<Router {routes} on:conditionsFailed={conditionsFailed} />
+<Frame>
+    <Router {routes} on:conditionsFailed={conditionsFailed} />
+</Frame>

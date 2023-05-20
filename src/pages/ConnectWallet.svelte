@@ -81,41 +81,39 @@
   };
 </script>
 
-<Frame backgroundColor="bg-black">
-  <div>
-    <div class="text-center">
-      <h1 class="mb-2 text-5xl font-bold">Connect your wallet</h1>
-      <p class="mb-5">
-        Connect the EOA you want to use to interact with your Circles account.
-      </p>
-    </div>
-    <div class="text-center">
-      {#if $connectedWallet}
-        <div>
-          <div class="mb-5 text-sm font-bold sm:text-lg">
-            {$connectedWalletAddress}
-          </div>
-          <div class="mb-5 font-bold text">
-            Connected to {$connectedWallet?.label}
-          </div>
-          <button
-            class="mb-5 btn btn-secondary"
-            on:click={() => {
-              disconnect($connectedWallet);
-            }}>Disconnect</button
-          ><br />
-          <button
-            class="btn btn-primary"
-            on:click={() => {
-              push("/connect-circles-safe");
-            }}>Select safe</button
-          >
-        </div>
-      {:else}
-        <div>
-          <button on:click={connect} class="btn btn-outline">Connect</button>
-        </div>
-      {/if}
-    </div>
+<div>
+  <div class="text-center">
+    <h1 class="mb-2 text-5xl font-bold">Connect your wallet</h1>
+    <p class="mb-5">
+      Connect the EOA you want to use to interact with your Circles account.
+    </p>
   </div>
-</Frame>
+  <div class="text-center">
+    {#if $connectedWallet}
+      <div>
+        <div class="mb-5 text-sm font-bold sm:text-lg">
+          {$connectedWalletAddress}
+        </div>
+        <div class="mb-5 font-bold text">
+          Connected to {$connectedWallet?.label}
+        </div>
+        <button
+          class="mb-5 btn btn-secondary"
+          on:click={() => {
+            disconnect($connectedWallet);
+          }}>Disconnect</button
+        ><br />
+        <button
+          class="btn btn-primary"
+          on:click={() => {
+            push("/connect-circles-safe");
+          }}>Select safe</button
+        >
+      </div>
+    {:else}
+      <div>
+        <button on:click={connect} class="btn btn-outline">Connect</button>
+      </div>
+    {/if}
+  </div>
+</div>

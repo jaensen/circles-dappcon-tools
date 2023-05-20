@@ -29,34 +29,32 @@
     }
 </script>
 
-<Frame backgroundColor="bg-black">
-    <h1 class="mb-5 text-5xl font-bold text-primary">{title}</h1>
-    {#if $actionStatus.state === ExecutionState.None}
-        <p class="mb-5 text-primary">{description}</p>
-        <div class="items-center form-control">
-            <button on:click={onButtonClicked}
-                    class="bg-black btn btn-primary text-primary"
-            >{actionButtonText}</button>
-        </div>
-    {:else if isProcessing($actionStatus.state)}
-        {#if $actionStatus.status && $actionStatus.status.trim() !== ""}
-            <div class="mb-4">
-                <div class="loader">
-                    <div class="loaderBar" />
-                </div>
-                <p class="text-info">
-                    {$actionStatus.status}
-                </p>
+<h1 class="mb-5 text-5xl font-bold text-primary">{title}</h1>
+{#if $actionStatus.state === ExecutionState.None}
+    <p class="mb-5 text-primary">{description}</p>
+    <div class="items-center form-control">
+        <button on:click={onButtonClicked}
+                class="bg-black btn btn-primary text-primary"
+        >{actionButtonText}</button>
+    </div>
+{:else if isProcessing($actionStatus.state)}
+    {#if $actionStatus.status && $actionStatus.status.trim() !== ""}
+        <div class="mb-4">
+            <div class="loader">
+                <div class="loaderBar" />
             </div>
-        {/if}
-    {:else if $actionStatus.state === ExecutionState.Success}
-        <p class="text-success text-primary">Action completed successfully.</p>
-    {:else if $actionStatus.state === ExecutionState.Error && allowRetry}
-        <div class="items-center form-control">
-            <p class="text-error mb-5">{$actionStatus.status}</p>
-            <button on:click={onButtonClicked}
-                    class="bg-black btn btn-primary text-primary"
-            >Retry: {actionButtonText}</button>
+            <p class="text-info">
+                {$actionStatus.status}
+            </p>
         </div>
     {/if}
-</Frame>
+{:else if $actionStatus.state === ExecutionState.Success}
+    <p class="text-success text-primary">Action completed successfully.</p>
+{:else if $actionStatus.state === ExecutionState.Error && allowRetry}
+    <div class="items-center form-control">
+        <p class="text-error mb-5">{$actionStatus.status}</p>
+        <button on:click={onButtonClicked}
+                class="bg-black btn btn-primary text-primary"
+        >Retry: {actionButtonText}</button>
+    </div>
+{/if}
