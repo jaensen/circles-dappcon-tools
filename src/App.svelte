@@ -11,6 +11,7 @@
     import TransferHog from "./routes/TransferHog.svelte";
     import { selectedSafe } from "./stores/singletons/selectedSafe";
     import { connectedWalletAddress } from "./stores/singletons/connectedWalletAddress";
+    import MintCrc from "./routes/MintCrc.svelte";
 
     const routes = {
         "/": Home,
@@ -41,6 +42,14 @@
         }),
         "/mint-hog": wrap({
             component: MintHoG,
+            conditions: [
+                () => {
+                    return $selectedSafe ? true : false;
+                },
+            ],
+        }),
+        "/mint-crc": wrap({
+            component: MintCrc,
             conditions: [
                 () => {
                     return $selectedSafe ? true : false;

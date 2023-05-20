@@ -11,19 +11,28 @@
   import type { PaymentPath } from "../models/paymentPath";
   import { push } from "svelte-spa-router";
   import Frame from "../components/Frame.svelte";
+  import {createEventDispatcher} from "svelte";
 
   export let web3: Web3;
   export let circlesSafe: CirclesSafe;
   export let mintAmount: number;
   export let anchorElementId = "YouMint";
 
+  enum MintingState {
+    Idle,
+    Minting,
+    Error,
+    Success
+  }
+
+  let mintingState: MintingState = MintingState.Idle;
   let status: string;
-  let isMinting: boolean;
-  let isError: boolean;
-  let isSuccess: boolean;
+
   let crcAmount: string;
   let tcAmount: string;
-  let transactionResult;
+  let transactionReceipt: any;
+
+  const dispatcher = createEventDispatcher();
 
   $: {
     if (mintAmount) {
@@ -126,9 +135,7 @@
 
   async function mintHoG(mintAmount: number) {
     try {
-      isSuccess = false;
-      isError = false;
-      isMinting = true;
+      mintingState = MintingState.Minting;
       status = "Initializing safe sdk...";
 
       const ethAdapter = new Web3Adapter({
@@ -180,18 +187,24 @@
       const signedSafeTransaction = await safe.signTransaction(safeTransaction);
 
       status = "Sending safe transaction...";
-      transactionResult = await safe.executeTransaction(signedSafeTransaction);
+      const transactionResult = await safe.executeTransaction(signedSafeTransaction);
 
-      status = `Safe transaction sent`;
-      isMinting = false;
-      isSuccess = true;
+      status = `Waiting for the transaction to be mined ...`
+      transactionReceipt = await transactionResult.promiEvent;
+      console.log("transactionReceipt:", transactionReceipt);
+
+      status = ``;
+      mintingState = MintingState.Success;
+
+      dispatcher("minted", {
+          mintAmount,
+          crcAmount,
+          tcAmount,
+      });
     } catch (e) {
       console.error(e);
-      isError = true;
+      mintingState = MintingState.Error;
       status = e.message;
-      isSuccess = false;
-    } finally {
-      isMinting = false;
     }
   }
 </script>
@@ -206,51 +219,48 @@
     <p>for</p>
     <h2 class="mb-5 text-2xl font-bold text-primary">
       {tcAmount} Circles ({Number.parseFloat(
-        web3.utils.fromWei(crcAmount, "ether")
-      ).toFixed(0)} CRC)
+            web3.utils.fromWei(crcAmount, "ether")
+    ).toFixed(0)} CRC)
     </h2>
   {/if}
   {#if status && status.trim() !== ""}
     <div class="mb-4">
-      {#if !isError && !isSuccess}
+      {#if mintingState === MintingState.Minting}
         <div class="loader">
           <div class="loaderBar" />
         </div>
       {/if}
-      <p class:text-info={!isError} class:text-error={isError}>
+      <p class:text-info={mintingState !== MintingState.Error} class:text-error={mintingState === MintingState.Error}>
         {@html status}
       </p>
     </div>
   {/if}
-  {#if !isSuccess}
+  {#if mintingState !== MintingState.Success}
     <div class="items-center form-control">
       <button
-        disabled={isMinting}
-        on:click={() => mintHoG(mintAmount)}
-        class="bg-black btn btn-primary text-primary"
-        >{!isError ? "" : "Retry: "}Mint HoG</button
+              disabled={mintingState === MintingState.Minting}
+              on:click={() => mintHoG(mintAmount)}
+              class="bg-black btn btn-primary text-primary"
+      >{mintingState !== MintingState.Error ? "" : "Retry: "}Mint HoG</button
       >
     </div>
   {:else}
     <p class="text-success text-primary">Minting completed successfully.</p>
   {/if}
-  {#if isSuccess && transactionResult}
-    <button
-      on:click={() => {
+  {#if mintingState === MintingState.Success && transactionReceipt}
+    <button on:click={() => {
         window.open(
-          "https://gnosisscan.io/tx/" + transactionResult.hash,
+          "https://gnosisscan.io/tx/" + transactionReceipt.hash,
           "_blank"
         );
       }}
-      class="mt-4 bg-black btn btn-primary text-primary"
-      >Open on GnosisScan</button
+            class="mt-4 bg-black btn btn-primary text-primary"
+    >Open on GnosisScan</button
     ><br />
     <button
-      on:click={() => push("/")}
-      class="mt-4 bg-black btn btn-primary text-primary">Back</button
-    >
+            on:click={() => push("/")}
+            class="mt-4 bg-black btn btn-primary text-primary">Back</button>
   {/if}
-
   <!--
         <FlowGraph/>
         -->

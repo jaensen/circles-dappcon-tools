@@ -9,25 +9,29 @@
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
   import Frame from "../components/Frame.svelte";
 
+  export enum DeploymentState {
+    Idle,
+    Deploying,
+    Error,
+    Done
+  }
+
   export let threshold: number = 1;
 
-  let working = false;
-  let error = false;
+  let deploymentState: DeploymentState = DeploymentState.Idle;
   let status: string;
-  let done = false;
 
   const dispatch = createEventDispatcher();
 
   async function deploySafe() {
     if (!$connectedWalletAddress || $connectedWalletAddress === "") {
       status = `No owner provided`;
-      error = true;
+      deploymentState = DeploymentState.Error;
       return;
     }
 
     try {
-      error = false;
-      working = true;
+      deploymentState = DeploymentState.Deploying;
       status = `Initializing safe sdk ...`;
       const ethAdapter = new Web3Adapter({
         web3: $web3,
@@ -49,12 +53,14 @@
       status = `Address: ${safe.getAddress()}`;
 
       dispatch("safeDeployed", safe);
-      done = true;
+      deploymentState = DeploymentState.Done;
     } catch (e) {
       status = `Error: ${e.message}`;
-      error = true;
+      deploymentState = DeploymentState.Error;
     } finally {
-      working = false;
+      if (deploymentState !== DeploymentState.Done) {
+        deploymentState = DeploymentState.Idle;
+      }
     }
   }
 </script>
@@ -64,14 +70,14 @@
   <p class="mb-5 text-primary">
     Click the button below to deploy a new Circles Safe on the Gnosis Chain
   </p>
-  {#if !working && !error && !done}
+  {#if deploymentState === DeploymentState.Idle}
     <button on:click={deploySafe} class="mb-5 btn btn-outline">Deploy</button>
-  {:else if error}
+  {:else if deploymentState === DeploymentState.Error}
     <button on:click={deploySafe} class="mb-5 btn btn-outline"
-      >Retry: Deploy</button
+    >Retry: Deploy</button
     >
     <p class="text-error">{status}</p>
-  {:else if done}
+  {:else if deploymentState === DeploymentState.Done}
     <p class="text-success">{status}</p>
   {:else}
     <div class="loader">
@@ -80,3 +86,4 @@
     <p class="text-info">{status}</p>
   {/if}
 </Frame>
+

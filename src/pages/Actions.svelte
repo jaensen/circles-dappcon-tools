@@ -18,8 +18,12 @@
       You can do the following things with your Circles Safe:
     </p>
     <button
-      class="mb-5 btn btn-outline text-primary"
-      on:click={() => push("/mint-hog")}>Mint HoG</button
+            class="mb-5 btn btn-outline text-primary"
+            on:click={() => push("/mint-hog")}>Mint HoG</button
+    ><br />
+    <button
+            class="mb-5 btn btn-outline text-primary"
+            on:click={() => push("/mint-crc")}>Mint Circles</button
     ><br />
     <button
       class="mb-5 btn btn-outline text-primary btn-sm"
