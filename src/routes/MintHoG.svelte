@@ -19,6 +19,5 @@
 {#if mintAmount > 0}
     <MintHoG web3={$web3}
              circlesSafe={$selectedSafe}
-             on:min
              mintAmount={mintAmount} />
 {/if}

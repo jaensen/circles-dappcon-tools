@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createFindSafesByOwner } from "../stores/factories/createFindSafesByOwner";
+  import { createFindSafesByOwner } from "../stores/factories/queries/createFindSafesByOwner";
   import CirclesSafeListItem from "./listItems/CirclesSafeListItem.svelte";
   import { createEventDispatcher, onDestroy } from "svelte";
   import { CirclesSafe } from "../models/circlesSafe";

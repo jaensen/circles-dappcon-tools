@@ -1,6 +1,6 @@
 import {createLiveSearchStore} from "./createLiveSearchStore";
 import Web3 from "web3";
-import {CirclesUbiIdApi} from "../../consts";
+import {CirclesUbiIdApi} from "../../../consts";
 
 export type FindCrcBalanceSearchArgs = {
     address: string

@@ -3,9 +3,9 @@
     import { CirclesSafe } from "../models/circlesSafe";
     import { crcToTc } from "@jaensen/timecircles";
     import Web3 from "web3";
-    import { createFindPaymentPath } from "../stores/factories/createFindPaymentPath";
-    import { createFindCrcBalance } from "../stores/factories/createFindCrcBalance";
-    import { createFindHoGBalance } from "../stores/factories/createFindHoGBalance";
+    import { createFindPaymentPath } from "../stores/factories/queries/createFindPaymentPath";
+    import { createFindCrcBalance } from "../stores/factories/queries/createFindCrcBalance";
+    import { createFindHoGBalance } from "../stores/factories/queries/createFindHoGBalance";
     import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
 
     export let circlesSafe: CirclesSafe;

@@ -1,21 +1,9 @@
 import {createLiveSearchStore} from "./createLiveSearchStore";
 import Web3 from "web3";
-import {HUB_ABI} from "../../abis/hub";
-import {CirclesUbiIdApi, HubAddress} from "../../consts";
+import {HUB_ABI} from "../../../abis/hub";
+import {CirclesUbiIdApi, HubAddress} from "../../../consts";
 import {ZERO_ADDRESS} from "@safe-global/protocol-kit/dist/src/utils/constants";
-
-export type PaymentPathTransfer = {
-    from: string,
-    to: string,
-    token: string,
-    tokenOwner: string,
-}
-
-export type PaymentPath = {
-    requestedAmount: string,
-    maxFlow: string,
-    path: PaymentPathTransfer[]
-};
+import type {PaymentPath} from "../../../models/paymentPath";
 
 export type PaymentPathSearchArgs = {
     from: string
