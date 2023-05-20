@@ -5,7 +5,7 @@ import type {TransactionReceipt} from "web3-core";
 import type Web3 from "web3";
 import { ExecutionState } from '../../models/executionState';
 
-export type TransactionStatus = {
+export type SafeTransactionStatus = {
     state: ExecutionState;
     status: string;
     receipt?: TransactionReceipt;
@@ -20,7 +20,7 @@ export function createSafeTransactionStore(
     safeAddress: string,
     generateSafeTransactionData: SafeTransactionDataGenerator,
 ) {
-    const {subscribe, set, update} = writable<TransactionStatus>({
+    const {subscribe, set, update} = writable<SafeTransactionStatus>({
         state: ExecutionState.Initializing,
         status: 'Initializing safe sdk...'
     });
@@ -45,7 +45,7 @@ export function createSafeTransactionStore(
         });
 
         update(state => ({...state, state: ExecutionState.Processing, status: 'Signing safe transaction...'}));
-        const signedSafeTransaction = await safe.signTransaction(safeTransaction);
+        const signedSafeTransaction = await safe.signTransaction(safeTransaction /*, "eth_signTypedData"*/);
 
         update(state => ({...state, state: ExecutionState.Processing, status: 'Sending safe transaction...'}));
         const transactionResult = await safe.executeTransaction(signedSafeTransaction);

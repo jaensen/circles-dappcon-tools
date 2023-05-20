@@ -6,7 +6,6 @@
   export let privateKey = "";
   export let address = "";
   export let mnemonicPhrase: string = "";
-  export let anchorElementId = "ChooseSafe";
 
   import { createEventDispatcher } from "svelte";
 
@@ -37,7 +36,6 @@
         <button
           on:click={() => {
             dispatch("eoaLoaded", address);
-            document.getElementById(anchorElementId).scrollIntoView();
           }}
           class="btn btn-primary">Proceed with address</button
         >

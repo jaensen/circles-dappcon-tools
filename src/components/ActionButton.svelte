@@ -8,7 +8,7 @@
     export let title: string;
     export let description: string;
     export let actionButtonText: string;
-    export let actionFactory: () => Readable<ActionStatus>;
+    export let actionFactory: () => Readable<ActionStatus>|Promise<Readable<ActionStatus>>;
     export let allowRetry = false;
     export let initialMessage = '';
 
@@ -19,7 +19,13 @@
     }
 
     async function onButtonClicked() {
-        actionStatus = actionFactory();
+        const store = actionFactory();
+        if (store instanceof Promise) {
+            const result = await store;
+            actionStatus = result;
+        } else {
+            actionStatus = store;
+        }
     }
 </script>
 

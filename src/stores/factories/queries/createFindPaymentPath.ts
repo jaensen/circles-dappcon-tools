@@ -1,4 +1,4 @@
-import {createLiveSearchStore} from "./createLiveSearchStore";
+import {createLiveSearchStore} from "../createLiveSearchStore";
 import Web3 from "web3";
 import {HUB_ABI} from "../../../abis/hub";
 import {CirclesUbiIdApi, HubAddress} from "../../../consts";

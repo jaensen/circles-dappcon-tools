@@ -1,12 +1,13 @@
 <script lang="ts">
+  import { writable } from 'svelte/store';
   import { createEventDispatcher } from "svelte";
   import EnterSeedPhrase from "../pages/EnterSeedPhrase.svelte";
   import { CirclesSafe } from "../models/circlesSafe";
   import ChooseSafe from "../pages/ChooseSafe.svelte";
-  import AddOwnerToSafe from "../pages/AddOwnerToSafe.svelte";
   import { selectedSafe } from "../stores/singletons/selectedSafe";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
   import { push } from "svelte-spa-router";
+  import AddOwnerToSafe2 from "../pages/AddOwnerToSafe2.svelte";
 
   const dispatcher = createEventDispatcher();
 
@@ -14,21 +15,15 @@
   let hasValidKey = false;
   let mnemonicPhrase: string;
 
-  const chooseSafeAnchorElementId: string = "ChooseSafe";
-  const addOwnerAnchorElementId: string = "AddOwnerToSafe";
+  const pageState = writable('enterSeedPhrase'); // store the current page
 
   function onSafeSelected(safe: CirclesSafe) {
     selectedSafe.set(safe);
-    setTimeout(() => {
-      document.getElementById(addOwnerAnchorElementId).scrollIntoView();
-    }, 10);
+    pageState.set('addOwnerToSafe2');
   }
 
   function onEoaLoaded(event) {
-    // const eoaAddress = event.detail;
-    setTimeout(() => {
-      document.getElementById(chooseSafeAnchorElementId).scrollIntoView();
-    }, 10);
+    pageState.set('chooseSafe');
   }
 
   function onAddOwnerSuccess(event) {
@@ -43,28 +38,26 @@
     address of the EOA that should be added as additional owner.
   </p>
 {:else}
-  <EnterSeedPhrase
-    on:eoaLoaded={onEoaLoaded}
-    bind:mnemonicPhrase
-    bind:address={ownerAddress}
-    bind:hasValidKey
-  />
-  {#if hasValidKey}
-    <ChooseSafe
-      on:safeSelected={(e) => onSafeSelected(e.detail)}
-      anchorElementId={chooseSafeAnchorElementId}
-      showImport={false}
-      showSignup={false}
-      bind:ownerAddress
+  {#if $pageState === 'enterSeedPhrase'}
+    <EnterSeedPhrase
+            on:eoaLoaded={onEoaLoaded}
+            bind:mnemonicPhrase
+            bind:address={ownerAddress}
+            bind:hasValidKey
     />
-  {/if}
-  {#if $selectedSafe}
-    <AddOwnerToSafe
-      selectedSafe={$selectedSafe}
-      anchorElementId={addOwnerAnchorElementId}
-      on:success={onAddOwnerSuccess}
-      bind:mnemonicPhrase
-      newOwnerAddress={$connectedWalletAddress}
+  {:else if $pageState === 'chooseSafe' && hasValidKey}
+    <ChooseSafe
+            on:safeSelected={(e) => onSafeSelected(e.detail)}
+            showImport={false}
+            showSignup={false}
+            bind:ownerAddress
+    />
+  {:else if $pageState === 'addOwnerToSafe2' && $selectedSafe}
+    <AddOwnerToSafe2
+            selectedSafe={$selectedSafe}
+            on:success={onAddOwnerSuccess}
+            bind:mnemonicPhrase
+            newOwnerAddress={$connectedWalletAddress}
     />
   {/if}
 {/if}

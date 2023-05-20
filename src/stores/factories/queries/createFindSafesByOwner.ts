@@ -1,4 +1,4 @@
-import {createLiveSearchStore} from "./createLiveSearchStore";
+import {createLiveSearchStore} from "../createLiveSearchStore";
 import Web3 from "web3";
 import type {CirclesSafe} from "../../../models/circlesSafe";
 import {CirclesGardenApi, CirclesSubgraphApi} from "../../../consts";

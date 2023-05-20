@@ -59,6 +59,9 @@
   const connect = async () => {
     await onboard.connectWallet();
     const wallet = $wallets$?.[0];
+    if (!wallet) {
+      return;
+    }
     console.info("Connected to wallet:", wallet.label);
     console.info("Connected wallet address:", wallet.accounts[0].address);
     connectedWalletAddress.set(wallet.accounts[0].address);
