@@ -1,70 +1,185 @@
 <script lang="ts">
     import "./app.css";
-    import Router, { replace } from "svelte-spa-router";
+    import Router, {push, replace} from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
-    import ConnectCirclesSafe from "./routes/ConnectCirclesSafe.svelte";
     import ConnectWallet from "./pages/ConnectWallet.svelte";
     import CreateCirclesSafe from "./routes/CreateCirclesSafe.svelte";
-    import ImportCirclesSafe from "./routes/ImportCirclesSafe.svelte";
     import MintHoG from "./routes/MintHoG.svelte";
-    import Home from "./routes/Home.svelte";
-    import TransferHog from "./routes/TransferHog.svelte";
     import { selectedSafe } from "./stores/singletons/selectedSafe";
     import { connectedWalletAddress } from "./stores/singletons/connectedWalletAddress";
-    import MintCrc from "./routes/MintCrc.svelte";
     import Frame from "./components/Frame.svelte";
+    import ChooseSafe from "./pages/ChooseSafe.svelte";
+    import Actions from "./pages/Actions.svelte";
+    import EnterSeedPhrase from "./pages/EnterSeedPhrase.svelte";
+    import Home from "./pages/Home.svelte";
+    import {importEoaAddress} from "./stores/singletons/importEoaAddress";
+    import {importSafe} from "./stores/singletons/importSafe";
+    import AddOwnerToSafe from "./pages/AddOwnerToSafe.svelte";
+    import {importEoaKey} from "./stores/singletons/importEoaKey";
+    import ImportCirclesSafe from "./routes/ImportCirclesSafe.svelte";
+    import DeploySafe from "./pages/DeploySafe.svelte";
+    import type {CirclesSafe} from "./models/circlesSafe";
+    import HubSignup from "./pages/HubSignup.svelte";
+    import MintCircles from "./pages/MintCircles.svelte";
 
     const routes = {
-        "/": Home,
-        "/connect-wallet": ConnectWallet,
-        "/connect-circles-safe": wrap({
-            component: ConnectCirclesSafe,
-            conditions: [
-                () => {
-                    return $connectedWalletAddress ? true : false;
-                },
-            ],
+        "/": wrap({
+            component: Home,
+            props: {
+                onContinue: () => push("/connect-wallet"),
+            }
         }),
-        "/import-circles-safe": wrap({
+        "/connect-wallet": wrap({
+            component: ConnectWallet,
+            props: {
+                onWalletConnected: e => {
+                    connectedWalletAddress.set(e);
+                    push(`/${e}/connect-circles-safe`);
+                }
+            },
+        }),
+        "/:ownerAddress/connect-circles-safe": wrap({
+            component: ChooseSafe,
+            props: {
+                onSafeSelected: e => {
+                    selectedSafe.set(e);
+                    push(`/${$connectedWalletAddress}/${e.safeAddress}`);
+                },
+                onImport: () => push(`/${$connectedWalletAddress}/import-circles-safe`),
+                onSignup: () => push(`/${$connectedWalletAddress}/create-circles-safe`),
+                showImport: () => true,
+                showSignup: () => true,
+            },
+            conditions: [
+                () => !!$connectedWalletAddress,
+            ]
+        }),
+        "/:ownerAddress/import-circles-safe": wrap({
             component: ImportCirclesSafe,
+            props: {
+                onContinue: () => push(`/${$connectedWalletAddress}/import-circles-safe/seedphrase`),
+            },
             conditions: [
-                () => {
-                    return $connectedWalletAddress ? true : false;
-                },
+                () => !!$connectedWalletAddress,
             ],
         }),
-        "/create-circles-safe": wrap({
+        "/:ownerAddress/import-circles-safe/seedphrase": wrap({
+            component: EnterSeedPhrase,
+            props: {
+                onEoaLoaded: (eoaAddress: string, privateKey: string) => {
+                    importEoaKey.set(privateKey);
+                    importEoaAddress.set(eoaAddress);
+                    importSafe.set(null);
+                    push(`/${$connectedWalletAddress}/import-circles-safe/${eoaAddress}`);
+                },
+            },
+            conditions: [
+                () => !!$connectedWalletAddress,
+            ],
+        }),
+        "/:connectedWalletAddress/import-circles-safe/:ownerAddress": wrap({
+            component: ChooseSafe,
+            props: {
+                onSafeSelected: e => {
+                    importSafe.set(e);
+                    push(`/${$connectedWalletAddress}/import-circles-safe/${$importEoaAddress}/${e.safeAddress}`);
+                },
+                showImport: () => false,
+                showSignup: () => false,
+            },
+            conditions: [
+                () => !!$importEoaAddress && !!$importEoaKey && !!$connectedWalletAddress
+            ],
+        }),
+        "/:ownerAddress/import-circles-safe/:importEoaAddress/:importSafeAddress": wrap({
+            component: AddOwnerToSafe,
+            props: {
+                privateKey: () => $importEoaKey,
+                newOwnerAddress: () => $connectedWalletAddress,
+                selectedSafe: () => $importSafe,
+                onDone: () => {
+                    importEoaKey.set(undefined);
+                    importEoaAddress.set(undefined);
+                    selectedSafe.set($importSafe);
+                    importSafe.set(undefined);
+
+                    push(`/${$connectedWalletAddress}/${$importSafe.safeAddress}`);
+                },
+            },
+            conditions: [
+                () => !!$importSafe,
+            ],
+        }),
+        "/:ownerAddress/create-circles-safe": wrap({
             component: CreateCirclesSafe,
+            props: {
+                onContinue: () => push(`/${$connectedWalletAddress}/create-circles-safe/deploy-safe`),
+            },
             conditions: [
-                () => {
-                    return $connectedWalletAddress ? true : false;
-                },
+                () => !!$connectedWalletAddress,
             ],
         }),
-        "/mint-hog": wrap({
+        "/:ownerAddress/create-circles-safe/deploy-safe": wrap({
+            component: DeploySafe,
+            props: {
+                onDone: (status) => {
+                    console.log("/:ownerAddress/create-circles-safe/deploy-safe.status: ", status);
+                    const circlesSafe:CirclesSafe = {
+                        safeAddress: status.safe.getAddress(),
+                        ownerAddress: $connectedWalletAddress,
+                        type: "Signup",
+                        userName: "",
+                        userAvatar: "",
+                    };
+                    selectedSafe.set(circlesSafe);
+                    push(`/${$connectedWalletAddress}/create-circles-safe/${circlesSafe.safeAddress}/signup`);
+                },
+            },
+            conditions: [
+                () => !!$connectedWalletAddress,
+            ],
+        }),
+        "/:ownerAddress/create-circles-safe/:safeAddress/signup": wrap({
+            component: HubSignup,
+            props: {
+                safe:() => $selectedSafe,
+                onDone: () => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}`),
+            },
+            conditions: [
+                () => !!$connectedWalletAddress && !!$selectedSafe,
+            ],
+        }),
+        "/:ownerAddress/:safeAddress": wrap({
+            component: Actions,
+            props: {
+                onMintHog: () => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}/mint-hog`),
+                onMintCircles: () => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}/mint-crc`),
+                onSelectSafe: () => push(`/${$connectedWalletAddress}/connect-circles-safe`),
+                onSelectWallet: () => push(`/connect-wallet`),
+            },
+            conditions: [
+                () => !!$connectedWalletAddress && !!$selectedSafe,
+            ],
+        }),
+        "/:ownerAddress/:safeAddress/mint-hog": wrap({
             component: MintHoG,
+            props: {
+                onDone: () => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}`),
+            },
             conditions: [
-                () => {
-                    return $selectedSafe ? true : false;
-                },
+                () => !!$connectedWalletAddress && !!$selectedSafe,
             ],
         }),
-        "/mint-crc": wrap({
-            component: MintCrc,
+        "/:ownerAddress/:safeAddress/mint-crc": wrap({
+            component: MintCircles,
+            props: {
+                onDone: () => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}`),
+                circlesSafe: () => $selectedSafe
+            },
             conditions: [
-                () => {
-                    return $selectedSafe ? true : false;
-                },
+                () => !!$connectedWalletAddress && !!$selectedSafe,
             ],
-        }),
-        "/transfer-hog": wrap({
-            component: TransferHog,
-            conditions: [
-                () => {
-                    return $selectedSafe ? true : false;
-                },
-            ],
-        }),
+        })
     };
 
     function conditionsFailed(event) {

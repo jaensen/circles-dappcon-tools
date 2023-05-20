@@ -6,13 +6,9 @@
     import {selectedSafe} from "../stores/singletons/selectedSafe";
 
     let mintAmount = 0;
-
-    function onMintHoG(amount: number) {
-        mintAmount = amount;
-    }
 </script>
 
-<BalanceAndMaxMintAmount on:mint={e => onMintHoG(e.detail)}
+<BalanceAndMaxMintAmount on:mint={e => mintAmount = e.detail}
                    web3={$web3}
                    circlesSafe={$selectedSafe}
                    toAddress={HoGTokenAddress} />

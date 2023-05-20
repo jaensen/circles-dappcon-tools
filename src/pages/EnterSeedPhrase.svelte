@@ -2,14 +2,13 @@
   import SeedPhraseInput from "../components/SeedPhraseInput.svelte";
   import { jumpToAnchor } from "../utils.ts";
   import Frame from "../components/Frame.svelte";
-  export let hasValidKey = false;
-  export let privateKey = "";
-  export let address = "";
-  export let mnemonicPhrase: string = "";
 
-  import { createEventDispatcher } from "svelte";
+  let mnemonicPhrase: string = "";
+  let hasValidKey = false;
+  let privateKey = "";
+  let address = "";
 
-  const dispatch = createEventDispatcher();
+  export let onEoaLoaded: (address: string, privateKey: string) => void;
 </script>
 
 
@@ -33,9 +32,7 @@
 <div class="text-center text-neutral-content">
   {#if hasValidKey && address !== ""}
     <button
-      on:click={() => {
-        dispatch("eoaLoaded", address);
-      }}
+      on:click={() => onEoaLoaded(address, privateKey)}
       class="btn btn-primary">Proceed with address</button
     >
   {/if}

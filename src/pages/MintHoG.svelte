@@ -5,13 +5,15 @@
   import {createFindPaymentPath} from "../stores/factories/queries/createFindPaymentPath";
   import {HoGTokenAddress} from "../consts";
   import {writable} from "svelte/store";
-  import ActionButton from "../components/ActionButton.svelte";
+  import Activity from "../components/Activity.svelte";
   import {crcToTc} from "@jaensen/timecircles";
+  import type {ActionStatus} from "../models/executionState";
   import {ExecutionState} from "../models/executionState";
 
   export let web3: Web3;
   export let circlesSafe: CirclesSafe;
   export let mintAmount: string;
+  export let onDone: (actionStatus:ActionStatus) => void;
 
   $: mintAmountInTc = mintAmount ? crcToTc(Date.now(), parseFloat(mintAmount)).toFixed(2) : "--";
 
@@ -48,8 +50,9 @@
   }
 </script>
 
-<ActionButton title={`Mint ${mintAmount} HoG`}
-              description={`You're about to mint ${mintAmount} HoG in exchange for ${mintAmountInTc} Circles.`}
-              actionButtonText="Mint"
-              allowRetry={true}
-              actionFactory={actionFactory} />
+<Activity title={`Mint ${mintAmount} HoG`}
+          description={`You're about to mint ${mintAmount} HoG in exchange for ${mintAmountInTc} Circles.`}
+          actionButtonText="Mint"
+          allowRetry={true}
+          onDone={onDone}
+          actionFactory={actionFactory} />

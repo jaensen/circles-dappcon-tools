@@ -1,15 +1,17 @@
 <script lang="ts">
-    import type Web3 from "web3";
     import type {CirclesSafe} from "../models/circlesSafe";
     import {createMintUbiStore} from "../stores/factories/tx/createMintUbiStore";
-    import ActionButton from "../components/ActionButton.svelte";
+    import Activity from "../components/Activity.svelte";
+    import type {ActionStatus} from "../models/executionState";
+    import {web3} from "../stores/singletons/web3";
 
-    export let web3: Web3;
-    export let circlesSafe: CirclesSafe;
+    export let circlesSafe: () => CirclesSafe;
+    export let onDone: (actionStatus:ActionStatus) => void;
 </script>
 
-<ActionButton title="Mint UBI"
-              description="You're about to mint UBI."
-              actionButtonText="Mint"
-              allowRetry={true}
-              actionFactory={() => createMintUbiStore(web3, circlesSafe)} />
+<Activity title="Mint UBI"
+          description="You're about to mint UBI."
+          actionButtonText="Mint"
+          allowRetry={true}
+          onDone={onDone}
+          actionFactory={() => createMintUbiStore($web3, circlesSafe())} />

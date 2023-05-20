@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Frame from "../components/Frame.svelte";
     import type {Readable} from "svelte/store";
     import {readable} from "svelte/store";
     import type {ActionStatus} from "../models/executionState";
@@ -11,21 +10,31 @@
     export let actionFactory: () => Readable<ActionStatus>|Promise<Readable<ActionStatus>>;
     export let allowRetry = false;
     export let initialMessage = '';
+    export let onDone: (actionStatus:ActionStatus) => void;
 
     let actionStatus: Readable<ActionStatus> = readable({ state: ExecutionState.None, status: initialMessage });
 
     const isProcessing = (state: ExecutionState) => {
-        return state !== ExecutionState.None && state !== ExecutionState.Success && state !== ExecutionState.Error;
+        return state !== ExecutionState.None
+            && state !== ExecutionState.Success
+            && state !== ExecutionState.Error;
     }
 
     async function onButtonClicked() {
         const store = actionFactory();
         if (store instanceof Promise) {
-            const result = await store;
-            actionStatus = result;
+            actionStatus = await store;
         } else {
             actionStatus = store;
         }
+        let unsubscribe = actionStatus.subscribe((status) => {
+            if (status.state === ExecutionState.Success || status.state === ExecutionState.Error) {
+                unsubscribe();
+            }
+            if (status.state === ExecutionState.Success && onDone) {
+                onDone(status);
+            }
+        });
     }
 </script>
 
