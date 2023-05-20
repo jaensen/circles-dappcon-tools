@@ -6,14 +6,10 @@
 
     export let web3: Web3;
     export let circlesSafe: CirclesSafe;
-
-    function actionFactory() {
-        return createMintUbiStore(web3, circlesSafe);
-    }
 </script>
 
 <ActionButton title="Mint UBI"
               description="You're about to mint UBI."
               actionButtonText="Mint"
               allowRetry={true}
-              actionFactory={actionFactory} />
+              actionFactory={() => createMintUbiStore(web3, circlesSafe)} />

@@ -7,7 +7,7 @@
   import { selectedSafe } from "../stores/singletons/selectedSafe";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
   import { push } from "svelte-spa-router";
-  import AddOwnerToSafe2 from "../pages/AddOwnerToSafe2.svelte";
+  import AddOwnerToSafe from "../pages/AddOwnerToSafe.svelte";
 
   const dispatcher = createEventDispatcher();
 
@@ -53,7 +53,7 @@
             bind:ownerAddress
     />
   {:else if $pageState === 'addOwnerToSafe2' && $selectedSafe}
-    <AddOwnerToSafe2
+    <AddOwnerToSafe
             selectedSafe={$selectedSafe}
             on:success={onAddOwnerSuccess}
             bind:mnemonicPhrase

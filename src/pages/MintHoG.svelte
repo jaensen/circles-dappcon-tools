@@ -12,7 +12,6 @@
   export let web3: Web3;
   export let circlesSafe: CirclesSafe;
   export let mintAmount: string;
-  export let anchorElementId = "YouMint";
 
   $: mintAmountInTc = mintAmount ? crcToTc(Date.now(), parseFloat(mintAmount)).toFixed(2) : "--";
 
@@ -38,7 +37,6 @@
           if (!path.result) {
               return;
           }
-          console.log(path.result);
 
           const mintHogTxStore = createMintHoGStore(web3, circlesSafe, path.result);
           mintHogTxStore.subscribe(txStatus => {
@@ -50,7 +48,6 @@
   }
 </script>
 
-<div id={anchorElementId} />
 <ActionButton title={`Mint ${mintAmount} HoG`}
               description={`You're about to mint ${mintAmount} HoG in exchange for ${mintAmountInTc} Circles.`}
               actionButtonText="Mint"

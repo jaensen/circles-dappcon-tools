@@ -22,9 +22,6 @@ export const createAddOwnerStore = async (connectedWalletWeb3: Web3, connectedWa
     const importedEoaNeedsGas = importedEoaWeb3.utils.toBN(importedEoaBalance)
         .lt(importedEoaWeb3.utils.toBN(importedEoaWeb3.utils.toWei(minRequiredGasForImportedEoa, "ether")));
 
-    console.log("Imported eoa balance: " + importedEoaBalance);
-    console.log("The imported eoa needs gas: " + importedEoaNeedsGas);
-
     let fundEoaTransactionStore: () => Readable<EoaTransactionStatus> = () => importedEoaNeedsGas
         ? createEoaTransactionStore(connectedWalletWeb3, async () => {
             return <TransactionConfig>{

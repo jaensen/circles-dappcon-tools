@@ -12,8 +12,6 @@
     export let toAddress: string;
     export let web3: Web3;
 
-    const youMintAnchorElementId: string = "YouMint";
-
     let mintAmount: number;
 
     const paymentPathStore = createFindPaymentPath();
@@ -144,10 +142,6 @@
             disabled={!mintAmount || mintAmount <= 0 || maxMintAmount == 0 || mintAmount > maxMintAmount}
             on:click={() => {
               dispatch("mint", mintAmount);
-              setTimeout(() => {
-                document.getElementById(youMintAnchorElementId)
-                        .scrollIntoView();
-              }, 30);
             }}
             class="btn btn-primary text-primary bg-blue">Mint HoG</button
           >
