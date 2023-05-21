@@ -3,7 +3,7 @@
     import Router, {push, replace} from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
     import ConnectWallet from "./pages/ConnectWallet.svelte";
-    import CreateCirclesSafe from "./routes/CreateCirclesSafe.svelte";
+    import CreateCirclesSafe from "./pages/CreateCirclesSafe.svelte";
     import MintHoG from "./routes/MintHoG.svelte";
     import { selectedSafe } from "./stores/singletons/selectedSafe";
     import { connectedWalletAddress } from "./stores/singletons/connectedWalletAddress";
@@ -16,18 +16,23 @@
     import {importSafe} from "./stores/singletons/importSafe";
     import AddOwnerToSafe from "./pages/AddOwnerToSafe.svelte";
     import {importEoaKey} from "./stores/singletons/importEoaKey";
-    import ImportCirclesSafe from "./routes/ImportCirclesSafe.svelte";
+    import ImportCirclesSafe from "./pages/ImportCirclesSafe.svelte";
     import DeploySafe from "./pages/DeploySafe.svelte";
     import type {CirclesSafe} from "./models/circlesSafe";
     import HubSignup from "./pages/HubSignup.svelte";
     import MintCircles from "./pages/MintCircles.svelte";
+
+    let bg = "bg-black";
 
     const routes = {
         "/": wrap({
             component: Home,
             props: {
                 onContinue: () => push("/connect-wallet"),
-            }
+            },
+            userData: {
+                backgroundColor: "bg-black",
+            },
         }),
         "/connect-wallet": wrap({
             component: ConnectWallet,
@@ -36,6 +41,9 @@
                     connectedWalletAddress.set(e);
                     push(`/${e}/connect-circles-safe`);
                 }
+            },
+            userData: {
+                backgroundColor: "bg-blue",
             },
         }),
         "/:ownerAddress/connect-circles-safe": wrap({
@@ -52,7 +60,10 @@
             },
             conditions: [
                 () => !!$connectedWalletAddress,
-            ]
+            ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
         }),
         "/:ownerAddress/import-circles-safe": wrap({
             component: ImportCirclesSafe,
@@ -62,6 +73,9 @@
             conditions: [
                 () => !!$connectedWalletAddress,
             ],
+            userData: {
+                backgroundColor: "bg-blue",
+            },
         }),
         "/:ownerAddress/import-circles-safe/seedphrase": wrap({
             component: EnterSeedPhrase,
@@ -76,6 +90,9 @@
             conditions: [
                 () => !!$connectedWalletAddress,
             ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
         }),
         "/:connectedWalletAddress/import-circles-safe/:ownerAddress": wrap({
             component: ChooseSafe,
@@ -90,6 +107,9 @@
             conditions: [
                 () => !!$importEoaAddress && !!$importEoaKey && !!$connectedWalletAddress
             ],
+            userData: {
+                backgroundColor: "bg-blue",
+            },
         }),
         "/:ownerAddress/import-circles-safe/:importEoaAddress/:importSafeAddress": wrap({
             component: AddOwnerToSafe,
@@ -109,6 +129,9 @@
             conditions: [
                 () => !!$importSafe,
             ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
         }),
         "/:ownerAddress/create-circles-safe": wrap({
             component: CreateCirclesSafe,
@@ -118,6 +141,9 @@
             conditions: [
                 () => !!$connectedWalletAddress,
             ],
+            userData: {
+                backgroundColor: "bg-blue",
+            },
         }),
         "/:ownerAddress/create-circles-safe/deploy-safe": wrap({
             component: DeploySafe,
@@ -138,6 +164,9 @@
             conditions: [
                 () => !!$connectedWalletAddress,
             ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
         }),
         "/:ownerAddress/create-circles-safe/:safeAddress/signup": wrap({
             component: HubSignup,
@@ -148,6 +177,9 @@
             conditions: [
                 () => !!$connectedWalletAddress && !!$selectedSafe,
             ],
+            userData: {
+                backgroundColor: "bg-blue",
+            },
         }),
         "/:ownerAddress/:safeAddress": wrap({
             component: Actions,
@@ -160,6 +192,9 @@
             conditions: [
                 () => !!$connectedWalletAddress && !!$selectedSafe,
             ],
+            userData: {
+                backgroundColor: "bg-blue",
+            },
         }),
         "/:ownerAddress/:safeAddress/mint-hog": wrap({
             component: MintHoG,
@@ -169,6 +204,9 @@
             conditions: [
                 () => !!$connectedWalletAddress && !!$selectedSafe,
             ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
         }),
         "/:ownerAddress/:safeAddress/mint-crc": wrap({
             component: MintCircles,
@@ -179,6 +217,9 @@
             conditions: [
                 () => !!$connectedWalletAddress && !!$selectedSafe,
             ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
         })
     };
 
@@ -188,6 +229,6 @@
     }
 </script>
 
-<Frame>
-    <Router {routes} on:conditionsFailed={conditionsFailed} />
+<Frame backgroundColor={bg}>
+    <Router {routes} on:routeLoading={e => {bg = e.detail.userData.backgroundColor}} on:conditionsFailed={conditionsFailed} />
 </Frame>

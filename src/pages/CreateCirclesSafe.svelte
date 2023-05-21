@@ -9,11 +9,3 @@
 <button class="btn btn-outline text-primary" on:click={() => onContinue?.()}>
   Start procedure
 </button>
-
-<!--
-{#if !deployedSafe}
-  <DeploySafe {threshold} on:safeDeployed={onSafeDeployed} />
-{:else}
-  <HubSignup safe={deployedSafe} on:signupCompleted={onSignupCompleted} />
-{/if}
--->
