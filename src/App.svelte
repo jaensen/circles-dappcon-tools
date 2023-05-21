@@ -4,7 +4,6 @@
     import { wrap } from "svelte-spa-router/wrap";
     import ConnectWallet from "./pages/ConnectWallet.svelte";
     import CreateCirclesSafe from "./pages/CreateCirclesSafe.svelte";
-    import MintHoG from "./routes/MintHoG.svelte";
     import { selectedSafe } from "./stores/singletons/selectedSafe";
     import { connectedWalletAddress } from "./stores/singletons/connectedWalletAddress";
     import Frame from "./components/Frame.svelte";
@@ -21,6 +20,10 @@
     import type {CirclesSafe} from "./models/circlesSafe";
     import HubSignup from "./pages/HubSignup.svelte";
     import MintCircles from "./pages/MintCircles.svelte";
+    import BalanceAndMaxMintAmount from "./pages/BalanceAndMaxMintAmount.svelte";
+    import MintHoG from "./pages/MintHoG.svelte";
+    import {web3} from "./stores/singletons/web3";
+    import {HoGTokenAddress} from "./consts";
 
     let bg = "bg-black";
 
@@ -197,8 +200,25 @@
             },
         }),
         "/:ownerAddress/:safeAddress/mint-hog": wrap({
+            component: BalanceAndMaxMintAmount,
+            props: {
+                web3: () => $web3,
+                circlesSafe: () => $selectedSafe,
+                toAddress: () => HoGTokenAddress,
+                onMint: (mintAmount:string) => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}/mint-hog/${mintAmount}`),
+            },
+            conditions: [
+                () => !!$connectedWalletAddress && !!$selectedSafe,
+            ],
+            userData: {
+                backgroundColor: "bg-black",
+            },
+        }),
+        "/:ownerAddress/:safeAddress/mint-hog/:mintAmount": wrap({
             component: MintHoG,
             props: {
+                web3: () => $web3,
+                circlesSafe: () => $selectedSafe,
                 onDone: () => push(`/${$connectedWalletAddress}/${$selectedSafe.safeAddress}`),
             },
             conditions: [
@@ -230,5 +250,7 @@
 </script>
 
 <Frame backgroundColor={bg}>
-    <Router {routes} on:routeLoading={e => {bg = e.detail.userData.backgroundColor}} on:conditionsFailed={conditionsFailed} />
+    <Router routes={routes}
+            on:routeLoading={e => {bg = e.detail.userData.backgroundColor}}
+            on:conditionsFailed={conditionsFailed} />
 </Frame>

@@ -10,22 +10,25 @@
   import type {ActionStatus} from "../models/executionState";
   import {ExecutionState} from "../models/executionState";
 
-  export let web3: Web3;
-  export let circlesSafe: CirclesSafe;
-  export let mintAmount: string;
+  export let web3: () => Web3;
+  export let circlesSafe: () => CirclesSafe;
   export let onDone: (actionStatus:ActionStatus) => void;
 
-  $: mintAmountInTc = mintAmount ? crcToTc(Date.now(), parseFloat(mintAmount)).toFixed(2) : "--";
+  export let params: {
+      mintAmount: string,
+  };
+
+  $: mintAmountInTc = params?.mintAmount ? crcToTc(Date.now(), parseFloat(params?.mintAmount)).toFixed(2) : "--";
 
   function actionFactory() {
       const mintHog = writable({ state: ExecutionState.None, status: '' });
       let paymentPath = createFindPaymentPath();
-      const mintAmountInWei = web3.utils.toWei(mintAmount.toString(), 'ether');
+      const mintAmountInWei = web3().utils.toWei(params?.mintAmount.toString(), 'ether');
 
       paymentPath.search({
-          web3: web3,
+          web3: web3(),
           amount: mintAmountInWei,
-          from: circlesSafe.safeAddress,
+          from: circlesSafe().safeAddress,
           to: HoGTokenAddress
       });
 
@@ -40,7 +43,7 @@
               return;
           }
 
-          const mintHogTxStore = createMintHoGStore(web3, circlesSafe, path.result);
+          const mintHogTxStore = createMintHoGStore(web3(), circlesSafe(), path.result);
           mintHogTxStore.subscribe(txStatus => {
               mintHog.set(txStatus);
           });
@@ -50,8 +53,8 @@
   }
 </script>
 
-<Activity title={`Mint ${mintAmount} HoG`}
-          description={`You're about to mint ${mintAmount} HoG in exchange for ${mintAmountInTc} Circles.`}
+<Activity title={`Mint ${params?.mintAmount} HoG`}
+          description={`You're about to mint ${params?.mintAmount} HoG in exchange for ${mintAmountInTc} Circles.`}
           actionButtonText="Mint"
           allowRetry={true}
           onDone={onDone}
