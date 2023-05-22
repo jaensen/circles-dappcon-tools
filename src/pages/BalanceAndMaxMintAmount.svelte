@@ -1,12 +1,12 @@
 <script lang="ts">
-    import {createEventDispatcher, onMount} from "svelte";
-    import {CirclesSafe} from "../models/circlesSafe";
-    import {crcToTc} from "@jaensen/timecircles";
+    import { createEventDispatcher, onMount } from "svelte";
+    import { CirclesSafe } from "../models/circlesSafe";
+    import { crcToTc } from "@jaensen/timecircles";
     import Web3 from "web3";
-    import {createFindPaymentPath} from "../stores/factories/queries/createFindPaymentPath";
-    import {createFindCrcBalance} from "../stores/factories/queries/createFindCrcBalance";
-    import {createFindHoGBalance} from "../stores/factories/queries/createFindHoGBalance";
-    import {connectedWalletAddress} from "../stores/singletons/connectedWalletAddress";
+    import { createFindPaymentPath } from "../stores/factories/queries/createFindPaymentPath";
+    import { createFindCrcBalance } from "../stores/factories/queries/createFindCrcBalance";
+    import { createFindHoGBalance } from "../stores/factories/queries/createFindHoGBalance";
+    import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
 
     export let circlesSafe: () => CirclesSafe;
     export let toAddress: () => string;
@@ -22,10 +22,13 @@
 
     $: maxMintAmount = $paymentPathStore.result
         ? Math.floor(
-            Number.parseFloat(
-                Web3.utils.fromWei($paymentPathStore.result.maxFlow, "ether") ?? "0"
-            )
-        )
+              Number.parseFloat(
+                  Web3.utils.fromWei(
+                      $paymentPathStore.result.maxFlow,
+                      "ether"
+                  ) ?? "0"
+              )
+          )
         : 0;
 
     onMount(async () => {
@@ -43,7 +46,7 @@
         }
         if (safe?.safeAddress && w3) {
             console.log("searching crc balance");
-            crcBalanceStore.search({address: safe.safeAddress});
+            crcBalanceStore.search({ address: safe.safeAddress });
             hogSafeBalanceStore.search({
                 address: safe.safeAddress,
                 web3: w3,
@@ -60,7 +63,7 @@
 <div>
     {#if !$crcBalanceStore.result}
         <div class="loader">
-            <div class="loaderBar"/>
+            <div class="loaderBar" />
         </div>
 
         <p class="text-info text-primary">Loading your Circles balance ...</p>
@@ -78,13 +81,13 @@
         </h1>
     {:else if $crcBalanceStore.error}
         <p class="text-error text-primary">
-            An error occurred while loading your Circles balance:<br/>
+            An error occurred while loading your Circles balance:<br />
             {$crcBalanceStore.error.message}
         </p>
     {/if}
     {#if !$hogSafeBalanceStore.result || !$hogWalletBalanceStore.result}
         <div class="loader">
-            <div class="loaderBar"/>
+            <div class="loaderBar" />
         </div>
         <p class="text-info text-primary">Loading your HoG balances ...</p>
     {:else if $hogSafeBalanceStore.result && $hogWalletBalanceStore.result}
@@ -102,21 +105,21 @@
         {/if}
     {:else if $hogSafeBalanceStore.error || $hogWalletBalanceStore.error}
         <p class="text-error text-primary">
-            An error occurred while loading your HoG balance:<br/>
+            An error occurred while loading your HoG balance:<br />
             {$hogSafeBalanceStore.error?.message ?? ""}
             {$hogWalletBalanceStore.error?.message ?? ""}
         </p>
     {/if}
     {#if !$paymentPathStore.result}
         <div class="loader">
-            <div class="loaderBar"/>
+            <div class="loaderBar" />
         </div>
         <p class="text-info text-primary">
             Calculating your token minting limit ...
         </p>
     {:else if $paymentPathStore.error}
         <p class="text-error text-primary">
-            An error occurred while calculating your token minting limit:<br/>
+            An error occurred while calculating your token minting limit:<br />
             {$paymentPathStore.error.message}
         </p>
     {:else if $paymentPathStore.result?.maxFlow}
@@ -124,7 +127,10 @@
         <h2 class="mb-5 text-3xl font-bold text-primary">
             {Math.floor(
                 Number.parseFloat(
-                    Web3.utils.fromWei($paymentPathStore.result.maxFlow, "ether")
+                    Web3.utils.fromWei(
+                        $paymentPathStore.result.maxFlow,
+                        "ether"
+                    )
                 )
             )} HoG
         </h2>
@@ -132,19 +138,22 @@
     {#if $paymentPathStore.result && $paymentPathStore?.result?.maxFlow}
         <div class="items-center form-control">
             <input
-                    type="number"
-                    class="w-full max-w-xs mb-5 text-center bg-white input input-bordered text-input text-blue"
-                    placeholder="Amount"
-                    min="0"
-                    max={maxMintAmount}
-                    bind:value={mintAmount}
+                type="number"
+                class="w-full max-w-xs mb-5 text-center bg-white input input-bordered text-input text-blue"
+                placeholder="Amount"
+                min="0"
+                max={maxMintAmount}
+                bind:value={mintAmount}
             />
             <button
-                    disabled={!mintAmount || mintAmount <= 0 || maxMintAmount == 0 || mintAmount > maxMintAmount}
-                    on:click={() => onMint(mintAmount)}
-                    class="btn btn-primary text-primary bg-blue">Mint HoG
-            </button
-            >
+                disabled={!mintAmount ||
+                    mintAmount <= 0 ||
+                    maxMintAmount == 0 ||
+                    mintAmount > maxMintAmount}
+                on:click={() => onMint(mintAmount)}
+                class="btn btn-primary text-primary bg-blue rounded-full w-80"
+                >Mint HoG
+            </button>
         </div>
     {/if}
 </div>

@@ -1,24 +1,31 @@
 <script lang="ts">
-    import type {Readable} from "svelte/store";
-    import {readable} from "svelte/store";
-    import type {ActionStatus} from "../models/executionState";
-    import {ExecutionState} from "../models/executionState";
+    import type { Readable } from "svelte/store";
+    import { readable } from "svelte/store";
+    import type { ActionStatus } from "../models/executionState";
+    import { ExecutionState } from "../models/executionState";
 
     export let title: string;
     export let description: string;
     export let actionButtonText: string;
-    export let actionFactory: () => Readable<ActionStatus>|Promise<Readable<ActionStatus>>;
+    export let actionFactory: () =>
+        | Readable<ActionStatus>
+        | Promise<Readable<ActionStatus>>;
     export let allowRetry = false;
-    export let initialMessage = '';
-    export let onDone: (actionStatus:ActionStatus) => void;
+    export let initialMessage = "";
+    export let onDone: (actionStatus: ActionStatus) => void;
 
-    let actionStatus: Readable<ActionStatus> = readable({ state: ExecutionState.None, status: initialMessage });
+    let actionStatus: Readable<ActionStatus> = readable({
+        state: ExecutionState.None,
+        status: initialMessage,
+    });
 
     const isProcessing = (state: ExecutionState) => {
-        return state !== ExecutionState.None
-            && state !== ExecutionState.Success
-            && state !== ExecutionState.Error;
-    }
+        return (
+            state !== ExecutionState.None &&
+            state !== ExecutionState.Success &&
+            state !== ExecutionState.Error
+        );
+    };
 
     async function onButtonClicked() {
         const store = actionFactory();
@@ -28,7 +35,10 @@
             actionStatus = store;
         }
         let unsubscribe = actionStatus.subscribe((status) => {
-            if (status.state === ExecutionState.Success || status.state === ExecutionState.Error) {
+            if (
+                status.state === ExecutionState.Success ||
+                status.state === ExecutionState.Error
+            ) {
                 unsubscribe();
             }
             if (status.state === ExecutionState.Success && onDone) {
@@ -42,9 +52,11 @@
 {#if $actionStatus.state === ExecutionState.None}
     <p class="mb-5 text-primary">{description}</p>
     <div class="items-center form-control">
-        <button on:click={onButtonClicked}
-                class="bg-black btn btn-primary text-primary"
-        >{actionButtonText}</button>
+        <button
+            on:click={onButtonClicked}
+            class="bg-black rounded-full w-80 btn btn-primary text-primary"
+            >{actionButtonText}</button
+        >
     </div>
 {:else if isProcessing($actionStatus.state)}
     {#if $actionStatus.status && $actionStatus.status.trim() !== ""}
@@ -62,8 +74,10 @@
 {:else if $actionStatus.state === ExecutionState.Error && allowRetry}
     <div class="items-center form-control">
         <p class="text-error mb-5">{$actionStatus.status}</p>
-        <button on:click={onButtonClicked}
-                class="bg-black btn btn-primary text-primary"
-        >Retry: {actionButtonText}</button>
+        <button
+            on:click={onButtonClicked}
+            class="bg-black btn btn-primary text-primary rounded-full w-80"
+            >Retry: {actionButtonText}</button
+        >
     </div>
 {/if}

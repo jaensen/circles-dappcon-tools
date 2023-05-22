@@ -12,8 +12,10 @@
     function onInput() {
         if (validateMnemonic(boxes[0].trim())) {
             boxes[0].split(" ").forEach((word, i) => {
-                boxes[i] = word.trim();
-                boxes = boxes;
+                if (i < 24) {
+                    boxes[i] = word.trim();
+                    boxes = boxes;
+                }
             });
         }
         validate();

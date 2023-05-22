@@ -11,11 +11,8 @@
   export let onEoaLoaded: (address: string, privateKey: string) => void;
 </script>
 
-
 <div class="text-center text-neutral-content">
-  <h1 class="mb-5 text-5xl font-bold text-primary">
-    Enter your seedphrase
-  </h1>
+  <h1 class="mb-5 text-5xl font-bold text-primary">Enter your seedphrase</h1>
   <p class="mb-5 text-primary">
     Please enter the seed phrase you stored when you created your circles
     account. You can copy & paste the full phrase in the first cell.
@@ -33,7 +30,8 @@
   {#if hasValidKey && address !== ""}
     <button
       on:click={() => onEoaLoaded(address, privateKey)}
-      class="btn btn-primary">Proceed with address</button
+      class="btn btn-primary rounded-full w-80 mb-10"
+      >Proceed with address</button
     >
   {/if}
 </div>

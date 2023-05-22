@@ -7,7 +7,6 @@
   export let onMintCircles: () => void;
   export let onSelectSafe: () => void;
   export let onSelectWallet: () => void;
-
 </script>
 
 <div class="text-center">
@@ -21,20 +20,19 @@
     You can do the following things with your Circles Safe:
   </p>
   <button
-          class="mb-5 btn btn-outline text-primary"
-          on:click={onMintHog}>Mint HoG</button
+    class="mb-5 btn btn-outline text-primary rounded-full w-80"
+    on:click={onMintHog}>Mint HoG</button
   ><br />
   <button
-          class="mb-5 btn btn-outline text-primary"
-          on:click={onMintCircles}>Mint Circles</button
+    class="mb-5 btn btn-outline text-primary rounded-full w-80"
+    on:click={onMintCircles}>Mint Circles</button
   ><br />
   <button
-    class="mb-5 btn btn-outline text-primary btn-sm"
-    on:click={onSelectSafe}
-    >Select different safe</button
+    class="mb-5 btn btn-outline text-primary btn-sm rounded-full w-80"
+    on:click={onSelectSafe}>Select different safe</button
   ><br />
   <button
-    class="mb-5 btn btn-outline text-primary btn-sm"
+    class="mb-5 btn btn-outline text-primary btn-sm rounded-full w-80"
     on:click={onSelectWallet}>Connect different wallet</button
   ><br />
 </div>

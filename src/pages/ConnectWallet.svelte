@@ -80,18 +80,23 @@
           Connected to {$connectedWallet?.label}
         </div>
         <button
-          class="mb-5 btn btn-secondary"
+          class="mb-5 btn btn-secondary rounded-full w-80"
           on:click={() => {
             disconnect($connectedWallet);
           }}>Disconnect</button
         ><br />
         <button
-          class="btn btn-primary"
-          on:click={() => onWalletConnected($connectedWallet.accounts[0].address)}>Select safe</button>
+          class="btn btn-primary rounded-full w-80"
+          on:click={() =>
+            onWalletConnected($connectedWallet.accounts[0].address)}
+          >Select safe</button
+        >
       </div>
     {:else}
       <div>
-        <button on:click={connect} class="btn btn-outline">Connect</button>
+        <button on:click={connect} class="btn btn-outline rounded-full w-80"
+          >Connect</button
+        >
       </div>
     {/if}
   </div>
