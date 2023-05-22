@@ -2,10 +2,29 @@
   export let onContinue: () => void;
 </script>
 
-<h1 class="mb-5 text-5xl font-bold text-primary">Hello there</h1>
-<p class="mb-5">
-  This tool connects your familiar Wallet to your Circles Safe.
-</p>
-<button class="btn btn-outline text-primary" on:click={() => onContinue?.()}
-  >Get started</button
->
+<div class="flex flex-col px-10 items-center">
+  <div class="flex justify-center mb-16">
+    <img src="/images/dappcon23.png" alt="DappConf" />
+  </div>
+  <div class="text-primary flex text-left">
+    DappCon 2023 will expand on the previous year's focus on Universal Basic
+    Income (UBI) by allowing attendees to purchase their event ticket using
+    Circles UBI. To purchase a DappCon ticket, you need to convert your Circles
+    UBI into "Human of Gnosis" Tokens.
+  </div>
+  <div class="text-primary my-10 text-left">
+    This app provides a step-by-step guide on how to purchase a DappCon ticket
+    using your Circles Account.
+  </div>
+  <div>
+    <button
+      class="btn btn-clasic btn-outline text-primary rounded-full w-80"
+      on:click={() => onContinue?.()}>Get started</button
+    >
+  </div>
+  <div class="text-primary mt-10 text-left">
+    For a detailed description, please refer to our blog post where we provide
+    comprehensive information on how to use this app to purchase a DappCon
+    ticket with your Circles Account.
+  </div>
+</div>

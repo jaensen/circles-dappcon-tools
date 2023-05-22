@@ -62,9 +62,6 @@
     };
 </script>
 
-<div class="absolute py-2.5 px-5">
-    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
-</div>
 <div class="hero min-h-screen bg-black">
     <div class="hero-content">
         <div>
@@ -87,7 +84,7 @@
                             Connected to {$wallets$?.[0]?.label}
                         </div>
                         <button
-                            class="btn btn-secondary text-primary bg-black"
+                            class="btn btn-secondary text-primary bg-black rounded-full w-80"
                             on:click={() => {
                                 disconnect($wallets$?.[0]);
                             }}>Disconnect</button
@@ -97,7 +94,8 @@
                     <div>
                         <button
                             on:click={connect}
-                            class="btn btn-primary text-primary">Connect</button
+                            class="btn btn-primary text-primary rounded-full w-80"
+                            >Connect</button
                         >
                     </div>
                 {/if}

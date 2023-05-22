@@ -1,10 +1,10 @@
 <script lang="ts">
   import CirclesSafeList from "../components/CirclesSafeList.svelte";
-  import type {CirclesSafe} from "../models/circlesSafe";
+  import type { CirclesSafe } from "../models/circlesSafe";
 
   export let params = {
-    ownerAddress: ""
-  }
+    ownerAddress: "",
+  };
   export let onSafeSelected: (safe: CirclesSafe) => void;
   export let onImport: () => void;
   export let onSignup: () => void;
@@ -29,7 +29,12 @@
   {/if}
 </div>
 <div class="max-h-[40vh] overflow-y-auto mb-5">
-  <CirclesSafeList ownerAddress={params.ownerAddress} bind:circlesSafes on:safeSelected={e => onSafeSelected ? onSafeSelected(e.detail) : console.log(e.detail)} />
+  <CirclesSafeList
+    ownerAddress={params.ownerAddress}
+    bind:circlesSafes
+    on:safeSelected={(e) =>
+      onSafeSelected ? onSafeSelected(e.detail) : console.log(e.detail)}
+  />
 </div>
 {#if showImport()}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -38,7 +43,7 @@
     <div class="flex-grow">
       <button
         on:click={() => onImport()}
-        class="btn btn-outline text-primary">Import</button
+        class="btn btn-outline text-primary rounded-full w-80">Import</button
       >
     </div>
   </a>
@@ -50,7 +55,7 @@
     <div class="flex-grow">
       <button
         on:click={() => onSignup()}
-        class="btn btn-outline text-primary">Sign-up</button
+        class="btn btn-outline text-primary rounded-full w-80">Sign-up</button
       >
     </div>
   </a>

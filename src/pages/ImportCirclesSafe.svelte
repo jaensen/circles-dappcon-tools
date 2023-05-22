@@ -6,6 +6,9 @@
 <p class="mb-5">
     In the next steps you will be able to import your existing Circles safe.
 </p>
-<button class="btn btn-outline text-primary" on:click={() => onContinue?.()}>
+<button
+    class="btn btn-outline text-primary rounded-full w-80"
+    on:click={() => onContinue?.()}
+>
     Start import
 </button>
