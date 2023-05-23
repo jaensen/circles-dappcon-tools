@@ -1,6 +1,11 @@
 <script lang="ts">
   import SvelteSimplebar from "./molecules/SimpleBar.svelte";
   export let backgroundColor: string = "bg-blue";
+  import { onMount } from "svelte";
+
+  let url = ``;
+
+  onMount(() => (url = window.location.href));
 
   let scrollContent;
   const initBar = (bar) => {
@@ -14,15 +19,17 @@
 >
   <div class="w-full frameContent">
     <div id="modalScrollable" class="frameContentScrollable">
-      <div class="absolute top-0 py-2.5 px-5 {backgroundColor} w-full z-0">
-        <a href="/">
-          <img
-            src="/images/dappconf-blue.png"
-            class="w-[60px]"
-            alt="DappConf"
-          />
-        </a>
-      </div>
+      {#if url.indexOf("#") > -1}
+        <div class="absolute top-0 py-2.5 px-5 {backgroundColor} w-full z-0">
+          <a href="/">
+            <img
+              src="/images/dappconf-blue.png"
+              class="w-[60px]"
+              alt="DappConf"
+            />
+          </a>
+        </div>
+      {/if}
       <SvelteSimplebar init={initBar}>
         <div class="w-full m-auto mt-24 overflow-hidden text-primary">
           <slot />
