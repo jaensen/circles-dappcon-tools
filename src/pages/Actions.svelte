@@ -16,7 +16,7 @@
       : $selectedSafe.userName}!
   </h1>
   <HoGBalance web3={$web3} circlesSafe={$selectedSafe} />
-  <p class="mb-5 text-primary">
+  <p class="mb-5 mt-10 text-primary">
     You can do the following things with your Circles Safe:
   </p>
   <button
@@ -34,5 +34,13 @@
   <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
     on:click={onSelectWallet}>Connect different wallet</button
+  ><br />
+  <button
+    class="mb-5 btn btn-outline text-primary rounded-full w-80"
+    on:click={() =>
+      window.open(
+        "https://app.unlock-protocol.com/checkout?id=463aa6f1-b051-4c83-842c-b374c1473f74",
+        "_blank"
+      )}>Buy DappCon Tickets</button
   ><br />
 </div>
