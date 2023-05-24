@@ -1,7 +1,7 @@
-import {createLiveSearchStore} from "../createLiveSearchStore";
-import Web3 from "web3";
-import type {CirclesSafe} from "../../../models/circlesSafe";
-import {CirclesGardenApi, CirclesSubgraphApi} from "../../../consts";
+import { createLiveSearchStore } from "../createLiveSearchStore";
+import type Web3 from "web3";
+import type { CirclesSafe } from "../../../models/circlesSafe";
+import { CirclesGardenApi, CirclesSubgraphApi } from "../../../consts";
 
 export type CirclesSafeMap = { [safeAddress: string]: CirclesSafe };
 

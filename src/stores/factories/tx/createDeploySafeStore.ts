@@ -1,7 +1,7 @@
-import Web3 from "web3";
-import {ExecutionState} from "../../../models/executionState";
-import Safe, {SafeFactory, Web3Adapter} from "@safe-global/protocol-kit";
-import {writable} from "svelte/store";
+import type Web3 from "web3";
+import { ExecutionState } from "../../../models/executionState";
+import Safe, { SafeFactory, Web3Adapter } from "@safe-global/protocol-kit";
+import { writable } from "svelte/store";
 
 export type DeploySafeStatus = {
     state: ExecutionState;
@@ -10,8 +10,8 @@ export type DeploySafeStatus = {
     error?: Error;
 };
 
-export const createDeploySafeStore = async (connectedWallet: Web3, connectedWalletAddress:string) => {
-    const {subscribe, set, update} = writable<DeploySafeStatus>({
+export const createDeploySafeStore = async (connectedWallet: Web3, connectedWalletAddress: string) => {
+    const { subscribe, set, update } = writable<DeploySafeStatus>({
         state: ExecutionState.Initializing,
         status: 'Initializing Web3Adapter ...'
     });
@@ -22,14 +22,14 @@ export const createDeploySafeStore = async (connectedWallet: Web3, connectedWall
             signerAddress: connectedWalletAddress,
         });
 
-        update(state => ({...state, state: ExecutionState.Processing, status: 'Creating safe factory...'}));
+        update(state => ({ ...state, state: ExecutionState.Processing, status: 'Creating safe factory...' }));
 
         const safeFactory = await SafeFactory.create({
             ethAdapter,
             isL1SafeMasterCopy: false,
         });
 
-        update(state => ({...state, state: ExecutionState.Processing, status: 'Deploying safe...'}));
+        update(state => ({ ...state, state: ExecutionState.Processing, status: 'Deploying safe...' }));
 
         const safe = await safeFactory.deploySafe({
             safeAccountConfig: {
@@ -38,13 +38,13 @@ export const createDeploySafeStore = async (connectedWallet: Web3, connectedWall
             }
         });
 
-        set({state: ExecutionState.Success, status: `Successfully deployed safe at ${safe.getAddress()}`, safe: safe});
+        set({ state: ExecutionState.Success, status: `Successfully deployed safe at ${safe.getAddress()}`, safe: safe });
     }
 
     deploySafe().catch(e => {
         console.error(e);
-        set({state: ExecutionState.Error, status: e.message, error: e});
+        set({ state: ExecutionState.Error, status: e.message, error: e });
     });
 
-    return {subscribe};
+    return { subscribe };
 }
