@@ -1,7 +1,7 @@
 import type Web3 from "web3";
 import { GROUP_CURRENCY_TOKEN_ABI } from "../abis/groupCurrencyToken";
 import { HoGTokenAddress, HubAddress } from "../consts";
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
 import type { CirclesSafe } from "../models/circlesSafe";
 import { HUB_ABI } from "../abis/hub";
 

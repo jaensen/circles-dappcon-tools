@@ -1,5 +1,5 @@
 import { createLiveSearchStore } from "../createLiveSearchStore";
-import type Web3 from "web3";
+import Web3 from "web3";
 import { HUB_ABI } from "../../../abis/hub";
 import { CirclesUbiIdApi, HubAddress } from "../../../consts";
 import { ZERO_ADDRESS } from "@safe-global/protocol-kit/dist/src/utils/constants";
@@ -15,7 +15,6 @@ export type PaymentPathSearchArgs = {
 export const EmptyPath: PaymentPath = {
     requestedAmount: "0",
     maxFlow: "0",
-    isValid: false,
     path: []
 }
 

@@ -1,5 +1,5 @@
 import type Web3 from "web3";
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
 import { ERC20_ABI } from "../abis/ERC20";
 
 export async function encodeTransferErc20(web3: Web3, token: string, toAddress: string, amount: string) {

@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
-import {ExecutionState} from "../../models/executionState";
-import {Readable} from "svelte/types/runtime/store";
-import {SafeTransactionStatus} from "./createSafeTransactionStore";
+import { ExecutionState } from "../../models/executionState";
+import type { Readable } from "svelte/types/runtime/store";
+import type { SafeTransactionStatus } from "./createSafeTransactionStore";
 
-export function createSequencerStore(stores:(() => Readable<SafeTransactionStatus>)[]) {
+export function createSequencerStore(stores: (() => Readable<SafeTransactionStatus>)[]) {
     const state = writable({
         state: ExecutionState.None,
         status: '',

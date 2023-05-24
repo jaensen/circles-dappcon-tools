@@ -1,11 +1,13 @@
-import type Web3 from "web3";
-import { createEoaTransactionStore, EoaTransactionStatus } from "../createEoaTransactionStore";
+import Web3 from "web3";
+import { createEoaTransactionStore } from "../createEoaTransactionStore";
+import type { EoaTransactionStatus } from "../createEoaTransactionStore";
 import type { TransactionConfig } from "web3-core";
 import type { Readable } from "svelte/store";
 import HDWalletProvider from "@truffle/hdwallet-provider";
 import { RpcEndpoint } from "../../../consts";
-import { createSafeTransactionStore, SafeTransactionStatus } from "../createSafeTransactionStore";
-import { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
+import { createSafeTransactionStore } from "../createSafeTransactionStore";
+import type { SafeTransactionStatus } from "../createSafeTransactionStore";
+import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
 import SafeDeploymentJson from "@safe-global/safe-deployments/dist/assets/v1.3.0/gnosis_safe_l2.json";
 import { createSequencerStore } from "../createSequencerStore";
 
