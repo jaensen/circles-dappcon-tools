@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { type CirclesSafe } from "../models/circlesSafe";
   import { crcToTc } from "@jaensen/timecircles";
-  import Web3 from "web3";
+  import type Web3 from "web3";
   import { createFindCrcBalance } from "../stores/factories/queries/createFindCrcBalance";
   import { createFindHoGBalance } from "../stores/factories/queries/createFindHoGBalance";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { mnemonicToEntropy, validateMnemonic } from "bip39";
-    import Web3 from "web3";
+    import type Web3 from "web3";
 
     export let isValidMnemonic: boolean = false;
     export let mnemonicPhrase: string = "";

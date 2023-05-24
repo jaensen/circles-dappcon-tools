@@ -1,14 +1,14 @@
-import {createLiveSearchStore} from "../createLiveSearchStore";
-import Web3 from "web3";
-import {HoGTokenAddress} from "../../../consts";
-import {GROUP_CURRENCY_TOKEN_ABI} from "../../../abis/groupCurrencyToken";
+import { createLiveSearchStore } from "../createLiveSearchStore";
+import type Web3 from "web3";
+import { HoGTokenAddress } from "../../../consts";
+import { GROUP_CURRENCY_TOKEN_ABI } from "../../../abis/groupCurrencyToken";
 
 export type FindHoGBalanceSearchArgs = {
     address: string
     web3: Web3
 }
 
-export const createFindHoGBalance = () => createLiveSearchStore<FindHoGBalanceSearchArgs, string|undefined>(200, async (searchArg: FindHoGBalanceSearchArgs) => {
+export const createFindHoGBalance = () => createLiveSearchStore<FindHoGBalanceSearchArgs, string | undefined>(200, async (searchArg: FindHoGBalanceSearchArgs) => {
     if (!searchArg.address || searchArg.address.length !== 42 || !new Web3().utils.isAddress(searchArg.address)) {
         return undefined;
     }

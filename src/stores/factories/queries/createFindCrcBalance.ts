@@ -1,12 +1,12 @@
-import {createLiveSearchStore} from "../createLiveSearchStore";
-import Web3 from "web3";
-import {CirclesUbiIdApi} from "../../../consts";
+import { createLiveSearchStore } from "../createLiveSearchStore";
+import type Web3 from "web3";
+import { CirclesUbiIdApi } from "../../../consts";
 
 export type FindCrcBalanceSearchArgs = {
     address: string
 }
 
-export const createFindCrcBalance = () => createLiveSearchStore<FindCrcBalanceSearchArgs, string|undefined>(200, async (searchArg: FindCrcBalanceSearchArgs) => {
+export const createFindCrcBalance = () => createLiveSearchStore<FindCrcBalanceSearchArgs, string | undefined>(200, async (searchArg: FindCrcBalanceSearchArgs) => {
     if (!searchArg.address || searchArg.address.length !== 42 || !new Web3().utils.isAddress(searchArg.address)) {
         return undefined;
     }

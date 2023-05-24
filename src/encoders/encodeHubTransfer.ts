@@ -1,10 +1,10 @@
-import Web3 from "web3";
-import {PaymentPath} from "../models/paymentPath";
-import {HUB_ABI} from "../abis/hub";
-import {HubAddress} from "../consts";
-import {MetaTransactionData} from "@safe-global/safe-core-sdk-types";
+import type Web3 from "web3";
+import { PaymentPath } from "../models/paymentPath";
+import { HUB_ABI } from "../abis/hub";
+import { HubAddress } from "../consts";
+import { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
 
-export async function encodeHubTransfer(web3:Web3, path: PaymentPath) {
+export async function encodeHubTransfer(web3: Web3, path: PaymentPath) {
     const hubContractCallArgs = path.path.reduce(
         (p, c) => {
             p.tokenOwners.push(c.tokenOwner);
@@ -31,7 +31,7 @@ export async function encodeHubTransfer(web3:Web3, path: PaymentPath) {
         )
         .encodeABI();
 
-    return Promise.resolve(<MetaTransactionData> {
+    return Promise.resolve(<MetaTransactionData>{
         to: HubAddress,
         value: "0",
         data: transferThroughData,
