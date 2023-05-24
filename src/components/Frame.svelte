@@ -1,11 +1,7 @@
 <script lang="ts">
   import SvelteSimplebar from "./molecules/SimpleBar.svelte";
   export let backgroundColor: string = "bg-blue";
-  import { onMount } from "svelte";
-
-  let url = ``;
-
-  onMount(() => (url = window.location.href));
+  import { location } from "svelte-spa-router";
 
   let scrollContent;
   const initBar = (bar) => {
@@ -19,7 +15,7 @@
 >
   <div class="w-full frameContent">
     <div id="modalScrollable" class="frameContentScrollable">
-      {#if url.indexOf("#") > -1}
+      {#if $location != "/"}
         <div class="absolute top-0 py-2.5 px-5 {backgroundColor} w-full z-0">
           <a href="/">
             <img
