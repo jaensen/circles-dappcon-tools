@@ -5,7 +5,11 @@ module.exports = {
   },
 
   mode: "jit",
-  content: ["./src/**/*.svelte", "./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
+  content: [
+    "./src/**/*.svelte",
+    "./public/**/*.html",
+    "./src/**/*.{js,jsx,ts,tsx,vue}",
+  ],
   daisyui: {
     themes: ["light", "dark"],
   },
@@ -15,6 +19,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        primary: {
+          DEFAULT: "#FFFFFF",
+        },
         blue: {
           DEFAULT: "#5244F3",
         },
@@ -23,12 +30,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        primary: ["Averta", "sans"]
+        primary: ["Averta", "sans"],
       },
-    }
+    },
   },
-  plugins: [
-    require("daisyui"),
-    require("@tailwindcss/typography")
-  ]
+  plugins: [require("daisyui"), require("@tailwindcss/typography")],
 };

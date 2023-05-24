@@ -1,7 +1,7 @@
-import {createLiveSearchStore} from "./createLiveSearchStore";
+import {createLiveSearchStore} from "../createLiveSearchStore";
 import Web3 from "web3";
-import {HoGTokenAddress} from "../../consts";
-import {GROUP_CURRENCY_TOKEN_ABI} from "../../abis/groupCurrencyToken";
+import {HoGTokenAddress} from "../../../consts";
+import {GROUP_CURRENCY_TOKEN_ABI} from "../../../abis/groupCurrencyToken";
 
 export type FindHoGBalanceSearchArgs = {
     address: string

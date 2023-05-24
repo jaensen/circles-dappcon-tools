@@ -1,69 +1,62 @@
 <script lang="ts">
-    import CirclesSafeList from "../components/CirclesSafeList.svelte";
-    import { CirclesSafe } from "../models/circlesSafe";
-    import { createEventDispatcher } from "svelte";
+  import CirclesSafeList from "../components/CirclesSafeList.svelte";
+  import type { CirclesSafe } from "../models/circlesSafe";
 
-    export let ownerAddress = "";
-    export let showSignup = true;
-    export let showImport = true;
-    export let anchorElementId = "ChooseSafe";
+  export let params = {
+    ownerAddress: "",
+  };
+  export let onSafeSelected: (safe: CirclesSafe) => void;
+  export let onImport: () => void;
+  export let onSignup: () => void;
+  export let showSignup: () => boolean;
+  export let showImport: () => boolean;
 
-    let circlesSafes: CirclesSafe[];
-
-    const dispatcher = createEventDispatcher();
+  let circlesSafes: CirclesSafe[];
 </script>
 
-<div class="absolute py-2.5 px-5">
-    <img src="/images/dappconf-blue.png" class="w-[60px]" alt="DappConf" />
+<div class="text-center text-neutral-content">
+  <h1 class="mb-5 text-4xl font-bold text-primary">Select your safe</h1>
+  {#if circlesSafes && circlesSafes.length > 1}
+    <p class="mb-5 text-primary">
+      You have multiple Circles Safes. Please select one from below.
+    </p>
+  {:else if circlesSafes && circlesSafes.length === 1}
+    <p class="mb-5 text-primary">Click on the Safe to continue.</p>
+  {:else if circlesSafes && circlesSafes.length === 0}
+    <p class="mb-5 text-primary">
+      Your wallet isn't connected to any Circles Safe yet.
+    </p>
+  {/if}
 </div>
-<div id={anchorElementId} />
-<div
-    class="hero min-h-screen bg-blue mx-auto w-full flex flex-col justify-center select-safe pt-[100px]"
->
-    <div class="w-full">
-        <div class="text-center text-neutral-content">
-            <h1 class="mb-5 text-4xl font-bold text-primary">
-                Select your safe
-            </h1>
-            {#if circlesSafes && circlesSafes.length > 1}
-                <p class="mb-5 text-primary">
-                    You have multiple Circles Safes. Please select one from
-                    below.
-                </p>
-            {:else if circlesSafes && circlesSafes.length === 1}
-                <p class="mb-5 text-primary">Click on the Safe to continue.</p>
-            {:else if circlesSafes && circlesSafes.length === 0}
-                <p class="mb-5 text-primary">
-                    Your wallet isn't connected to any Circles Safe yet.
-                </p>
-            {/if}
-        </div>
-        <div class="h-screen max-h-[40vh] overflow-y-auto mb-5 w-full">
-            <CirclesSafeList
-                bind:ownerAddress
-                bind:circlesSafes
-                on:safeSelected
-            />
-        </div>
-        {#if showImport}
-            <a on:click class="flex p-3 text-center">
-                <div class="flex-grow text-neutral-content">
-                    <button
-                        on:click={() => dispatcher("import")}
-                        class="w-1/3 btn btn-primary bg-blue">Import</button
-                    >
-                </div>
-            </a>
-        {/if}
-        {#if showSignup}
-            <a on:click class="flex p-3 text-center">
-                <div class="flex-grow text-neutral-content">
-                    <button
-                        on:click={() => dispatcher("signup")}
-                        class="w-1/3 btn btn-primary bg-blue">Sign-up</button
-                    >
-                </div>
-            </a>
-        {/if}
+<div class="max-h-[40vh] overflow-y-auto mb-5">
+  <CirclesSafeList
+    ownerAddress={params.ownerAddress}
+    bind:circlesSafes
+    on:safeSelected={(e) =>
+      onSafeSelected ? onSafeSelected(e.detail) : console.log(e.detail)}
+  />
+</div>
+{#if showImport()}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <a on:click class="flex p-3 text-center">
+    <div class="flex-grow">
+      <button
+        on:click={() => onImport()}
+        class="btn btn-outline text-primary rounded-full w-80">Import</button
+      >
     </div>
-</div>
+  </a>
+{/if}
+{#if showSignup()}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <a on:click class="flex p-3 text-center">
+    <div class="flex-grow">
+      <button
+        on:click={() => onSignup()}
+        class="btn btn-outline text-primary rounded-full w-80">Sign-up</button
+      >
+    </div>
+  </a>
+{/if}

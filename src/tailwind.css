@@ -2,31 +2,45 @@
 
 .btn {
     box-sizing: border-box;
-    height: 35px;
-    width: 370px;
-    font-size: 25px;
-    text-align: center;
+
+    font-size: calc(var(--scale, 1.5) * 1rem);
     text-transform: initial;
-    border: 1px solid #FFFFFF;
-    border-radius: 30px;
+    border: 1px solid #ffffff;
+    @apply px-8;
+    @apply text-primary;
 }
 
-.btn-primary:hover {
+.btn-clasic {
+    border-radius: 50% !important;
+    color: red;
+    width: 300px;
+}
+
+.btn-sm {
+    --scale: 1;
+}
+
+.btn-outline:hover {
     background-color: initial;
-    border: 2px solid #FFFFFF;
+    border: 2px solid #ffffff;
+    @apply text-primary;
+}
+
+input {
+    @apply bg-white;
 }
 
 .text-primary {
-    color: #FFFFFF;
+    color: #ffffff;
     font-style: normal;
     font-weight: 400;
-    font-family: 'Averta Regular';
+    font-family: "Averta Regular";
 }
 
 .text-input {
     font-style: normal;
     font-weight: 400;
-    font-family: 'Averta Regular';
+    font-family: "Averta Regular";
 }
 
 .loader {
@@ -41,7 +55,7 @@
 }
 
 .loader:before {
-    content: '';
+    content: "";
     border: 1px solid #fff;
     border-radius: 10px;
     position: absolute;
@@ -87,4 +101,23 @@
         right: 0%;
         width: 0%;
     }
+}
+
+.flex-parent {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.long-and-truncated {
+    flex: 1;
+}
+
+.long-and-truncated,
+:global(.long-and-truncated > *) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

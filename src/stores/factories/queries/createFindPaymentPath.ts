@@ -1,22 +1,9 @@
-import {createLiveSearchStore} from "./createLiveSearchStore";
+import { createLiveSearchStore } from "../createLiveSearchStore";
 import Web3 from "web3";
-import {HUB_ABI} from "../../abis/hub";
-import {CirclesUbiIdApi, HubAddress} from "../../consts";
-import {ZERO_ADDRESS} from "@safe-global/protocol-kit/dist/src/utils/constants";
-
-export type PaymentPathTransfer = {
-    from: string,
-    to: string,
-    token: string,
-    tokenOwner: string,
-}
-
-export type PaymentPath = {
-    requestedAmount: string,
-    maxFlow: string,
-    isValid: boolean,
-    path: PaymentPathTransfer[]
-};
+import { HUB_ABI } from "../../../abis/hub";
+import { CirclesUbiIdApi, HubAddress } from "../../../consts";
+import { ZERO_ADDRESS } from "@safe-global/protocol-kit/dist/src/utils/constants";
+import type { PaymentPath } from "../../../models/paymentPath";
 
 export type PaymentPathSearchArgs = {
     from: string
@@ -44,7 +31,7 @@ export const createFindPaymentPath = () => createLiveSearchStore<PaymentPathSear
     // Check if 'from' and 'to' are signed up at the Circles Hub
     const hubContract = new searchArgs.web3.eth.Contract(<any>HUB_ABI, HubAddress);
     const isSignedUpResult = await Promise.all([
-          hubContract.methods.userToToken(searchArgs.from).call()
+        hubContract.methods.userToToken(searchArgs.from).call()
         , hubContract.methods.organizations(searchArgs.from).call()
         , hubContract.methods.userToToken(searchArgs.to).call()
         , hubContract.methods.organizations(searchArgs.to).call()]);

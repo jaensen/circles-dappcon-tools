@@ -1,4 +1,4 @@
-[
+export const TOKEN_ABI = [
 	{
 		"inputs": [
 			{
