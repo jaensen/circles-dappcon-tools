@@ -6,13 +6,13 @@
   <div class="flex justify-center mb-16">
     <img src="/images/dappcon23.png" alt="DappConf" />
   </div>
-  <div class="text-primary flex text-left w-[625px]">
+  <div class="text-primary flex text-left max-w-[625px]">
     DappCon 2023 will expand on the previous year's focus on Universal Basic
     Income (UBI) by allowing attendees to purchase their event ticket using
     Circles UBI. To purchase a DappCon ticket, you need to convert your Circles
     UBI into "Human of Gnosis" Tokens.
   </div>
-  <div class="text-primary my-10 text-left w-[625px]">
+  <div class="text-primary my-10 text-left max-w-[625px]">
     This app provides a step-by-step guide on how to purchase a DappCon ticket
     using your Circles Account.
   </div>
@@ -22,7 +22,7 @@
       on:click={() => onContinue?.()}>Get started</button
     >
   </div>
-  <div class="text-primary mt-10 text-left w-[625px]">
+  <div class="text-primary mt-10 text-left max-w-[625px]">
     For a detailed description, please refer to our blog post where we provide
     comprehensive information on how to use this app to purchase a DappCon
     ticket with your Circles Account.
