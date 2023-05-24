@@ -5,7 +5,7 @@
   import { AppDescription, AppIcon, AppName, RpcEndpoint } from "../consts";
   import { connectedWallet } from "../stores/singletons/connectedWallet";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
-  import type Web3 from "web3";
+  import Web3 from "web3";
   import { web3 } from "../stores/singletons/web3";
 
   export let onWalletConnected: (wallet: any) => void;
@@ -94,7 +94,9 @@
       </div>
     {:else}
       <div>
-        <button on:click={connect} class="btn btn-outline rounded-full w-80"
+        <button
+          on:click={connect}
+          class="btn text-primary btn-outline rounded-full w-80 mt-5"
           >Connect</button
         >
       </div>
