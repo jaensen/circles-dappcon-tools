@@ -84,7 +84,7 @@
                             Connected to {$wallets$?.[0]?.label}
                         </div>
                         <button
-                            class="btn btn-secondary text-primary bg-black rounded-full w-80"
+                            class="btn btn-secondary text-primary rounded-full w-80"
                             on:click={() => {
                                 disconnect($wallets$?.[0]);
                             }}>Disconnect</button
