@@ -33,10 +33,10 @@
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
     on:click={onMintCircles}>Mint Circles</button
   ><br /> -->
-  <button
+  <!-- <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
     on:click={onSelectSafe}>Select different safe</button
-  ><br />
+  ><br /> -->
   <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
     on:click={onSelectWallet}>Connect different wallet</button
