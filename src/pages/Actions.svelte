@@ -38,7 +38,7 @@
   <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80 normal-case"
     on:click={() =>
-      window.open("https://swap.cow.fi/#/100/swap/WXDAI/HoG", "_blank")}
+      window.open("https://swap.cow.fi/#/100/swap/XDAI/HoG", "_blank")}
     >BUY HoG ON COWSWAP</button
   ><br />
   <button
