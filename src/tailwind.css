@@ -1,19 +1,14 @@
 @import "./fonts.css";
 
 .btn {
-    box-sizing: border-box;
+    font-size: 1rem;
+    /* box-sizing: border-box;
 
     font-size: calc(var(--scale, 1.5) * 1rem);
     text-transform: initial;
     border: 1px solid #ffffff;
     @apply px-8;
-    @apply text-primary;
-}
-
-.btn-clasic {
-    border-radius: 50% !important;
-    color: red;
-    width: 300px;
+    @apply text-primary; */
 }
 
 .btn-sm {
@@ -35,6 +30,10 @@ input {
     font-style: normal;
     font-weight: 400;
     font-family: "Averta Regular";
+}
+
+.text-italic {
+    font-family: "Averta Italic";
 }
 
 .text-input {
