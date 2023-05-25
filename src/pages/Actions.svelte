@@ -5,7 +5,7 @@
 
   export let onMintHog: () => void;
   // export let onMintCircles: () => void;
-  export let onSelectSafe: () => void;
+  // export let onSelectSafe: () => void;
   export let onSelectWallet: () => void;
 </script>
 
