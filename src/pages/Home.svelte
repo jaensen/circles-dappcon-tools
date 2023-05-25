@@ -6,12 +6,30 @@
   <div class="flex justify-center mb-16">
     <img src="/images/dappcon23.png" alt="DappConf" />
   </div>
-  <div class="text-primary flex text-left max-w-[625px]">
+  <p class="text-primary text-left max-w-[625px]">
     DappCon 2023 will expand on the previous year's focus on Universal Basic
     Income (UBI) by allowing attendees to purchase their event ticket using
-    Circles UBI. To purchase a DappCon ticket, you need to convert your Circles
-    UBI into "Human of Gnosis" Tokens.
-  </div>
+    <span
+      class="underline cursor-pointer"
+      on:click={() => window.open("https://www.joincircles.net/", "_blank")}
+      on:keypress
+    >
+      Circles UBI
+    </span>
+    . To purchase a DappCon ticket, you need to convert your Circles UBI into
+    <span
+      class="underline cursor-pointer"
+      on:keypress
+      on:click={() =>
+        window.open(
+          "https://forum.gnosis.io/t/humans-of-gnosis-an-experimental-circles-group-currency/6365",
+          "_blank"
+        )}
+    >
+      “Humans of Gnosis”
+    </span>
+    Tokens.
+  </p>
   <div class="text-primary my-10 text-left max-w-[625px]">
     This app provides a step-by-step guide on how to purchase a DappCon ticket
     using your Circles Account.
@@ -22,7 +40,15 @@
       on:click={() => onContinue?.()}>Get started</button
     >
   </div>
-  <div class="text-primary mt-10 text-left max-w-[625px]">
+  <div
+    class="text-primary mt-10 text-left max-w-[625px] text-italic cursor-pointer"
+    on:keypress
+    on:click={() =>
+      window.open(
+        "https://drive.google.com/file/d/1cZjXtJbLL0DNl_l_hF7iMTb-NdROM8E_/view?pli=1",
+        "_blank"
+      )}
+  >
     For a detailed description, please refer to our blog post where we provide
     comprehensive information on how to use this app to purchase a DappCon
     ticket with your Circles Account.

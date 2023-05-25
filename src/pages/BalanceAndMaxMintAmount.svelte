@@ -151,8 +151,8 @@
                     maxMintAmount == 0 ||
                     mintAmount > maxMintAmount}
                 on:click={() => onMint(mintAmount)}
-                class="btn btn-primary text-primary bg-blue rounded-full w-80"
-                >Mint HoG
+                class="btn btn-primary text-primary bg-blue rounded-full w-80 normal-case"
+                >MINT HoG
             </button>
         </div>
     {/if}

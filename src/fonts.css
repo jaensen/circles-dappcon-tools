@@ -3,3 +3,9 @@
     font-style: normal;
     src: url("../public/fonts/AvertaStd-Regular.ttf");
 }
+
+@font-face {
+    font-family: "Averta Italic";
+    font-style: normal;
+    src: url("../public/fonts/AvertaStd-RegularItalic.ttf");
+}
