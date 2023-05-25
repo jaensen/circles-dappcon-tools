@@ -23,6 +23,12 @@
     class="mb-5 btn btn-outline text-primary rounded-full w-80 normal-case"
     on:click={onMintHog}>MINT HoG</button
   ><br />
+  <button
+    class="mb-5 btn btn-outline text-primary rounded-full w-80 normal-case"
+    on:click={() =>
+      window.open("https://swap.cow.fi/#/100/swap/XDAI/HoG", "_blank")}
+    >BUY HoG ON COWSWAP</button
+  ><br />
   <!-- <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
     on:click={onMintCircles}>Mint Circles</button
@@ -34,12 +40,6 @@
   <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
     on:click={onSelectWallet}>Connect different wallet</button
-  ><br />
-  <button
-    class="mb-5 btn btn-outline text-primary rounded-full w-80 normal-case"
-    on:click={() =>
-      window.open("https://swap.cow.fi/#/100/swap/XDAI/HoG", "_blank")}
-    >BUY HoG ON COWSWAP</button
   ><br />
   <button
     class="mb-5 btn btn-outline text-primary rounded-full w-80"
