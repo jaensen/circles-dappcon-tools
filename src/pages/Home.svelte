@@ -45,7 +45,7 @@
     on:keypress
     on:click={() =>
       window.open(
-        "https://drive.google.com/file/d/1cZjXtJbLL0DNl_l_hF7iMTb-NdROM8E_/view?pli=1",
+        "https://drive.google.com/file/d/1kxrAf4oumeaPLZekVCKjUsO9DT4g2dKB/view",
         "_blank"
       )}
   >
