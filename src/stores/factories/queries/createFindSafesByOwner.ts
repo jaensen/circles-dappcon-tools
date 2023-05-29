@@ -33,7 +33,7 @@ async function queryCirclesGarden(ownerAddress: string, safeAddresses: string[])
                 return <CirclesSafe>{
                     type: "Person",
                     userName: o.username,
-                    userAvatar: o.avataUrl,
+                    userAvatar: o.avatarUrl,
                     safeAddress: o.safeAddress.toLowerCase(),
                     ownerAddress: ownerAddress.toLowerCase(),
                 };
