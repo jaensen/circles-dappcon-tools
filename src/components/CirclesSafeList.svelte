@@ -48,7 +48,7 @@
     {:else if $findSafeByOwnerStore.result?.length > 0}
       {#each $findSafeByOwnerStore.result as circlesSafe, i}
         <div
-          class="flex w-full mb-5"
+          class="flex w-full mb-8"
           class:cursor-pointer={canSelect}
           class:bg-info={selectedSafe === circlesSafe}
         >
