@@ -1,5 +1,5 @@
-export const AppName = "Prepare Safe";
-export const AppDescription = "Adds your existing EOA as an owner to a Circles Safe.";
+export const AppName = "Mint HoG with Circles";
+export const AppDescription = "Exchange your Circles for HoG to buy DappCon tickets";
 export const AppIcon = "'<svg></svg>'";
 export const RpcEndpoint = "https://rpc.circlesubi.id/";
 export const CirclesGardenApi = `https://api.circles.garden/`;

@@ -6,7 +6,7 @@
   import {HoGTokenAddress} from "../consts";
   import {writable} from "svelte/store";
   import Activity from "../components/Activity.svelte";
-  import {crcToTc} from "@jaensen/timecircles";
+  import {crcToTc} from "@circles/timecircles";
   import type {ActionStatus} from "../models/executionState";
   import {ExecutionState} from "../models/executionState";
 

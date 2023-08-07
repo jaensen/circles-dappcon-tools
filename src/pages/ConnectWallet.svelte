@@ -15,13 +15,14 @@
 
   const wallets = [injected, walletConnect];
 
-  const chains = [
-    {
+  const chains = [{
       id: "0x64",
-      token: "xDai",
-      label: "Gnosis Chain",
       rpcUrl: RpcEndpoint,
-    },
+      label: "Gnosis Chain",
+      token: "xDai",
+      publicRpcUrl: RpcEndpoint,
+      blockExplorerUrl: "https://gnosisscan.io/"
+    }
   ];
 
   const appMetadata = {
@@ -50,8 +51,10 @@
 
     connectedWalletAddress.set(mostRecentWallet.accounts[0].address);
     connectedWallet.set(mostRecentWallet);
+
     const web3Instance = new Web3((<any>mostRecentWallet).provider);
     web3.set(web3Instance);
+
     onWalletConnected?.(mostRecentWallet.accounts[0].address);
   };
 
@@ -97,8 +100,7 @@
         <button
           on:click={connect}
           class="btn text-primary btn-outline rounded-full w-80 mt-5"
-          >Connect</button
-        >
+          >Connect</button>
       </div>
     {/if}
   </div>

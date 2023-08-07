@@ -8,8 +8,8 @@ import { RpcEndpoint } from "../../../consts";
 import { createSafeTransactionStore } from "../createSafeTransactionStore";
 import type { SafeTransactionStatus } from "../createSafeTransactionStore";
 import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
-import SafeDeploymentJson from "@safe-global/safe-deployments/dist/assets/v1.3.0/gnosis_safe_l2.json";
 import { createSequencerStore } from "../createSequencerStore";
+import {safe_abi} from "../../../abis/safe_abi";
 
 export const createAddOwnerStore = async (connectedWalletWeb3: Web3, connectedWalletAddress: string, eoaKey: string, safeAddress: string) => {
     const eoaAccount = connectedWalletWeb3.eth.accounts.privateKeyToAccount(eoaKey);
@@ -35,7 +35,7 @@ export const createAddOwnerStore = async (connectedWalletWeb3: Web3, connectedWa
         : undefined;
 
     let addOwnerTransactionStore: () => Readable<SafeTransactionStatus> = () => createSafeTransactionStore(importedEoaWeb3, eoaAccount.address, safeAddress, async () => {
-        const safeContract = new importedEoaWeb3.eth.Contract(<any>SafeDeploymentJson.abi, safeAddress);
+        const safeContract = new importedEoaWeb3.eth.Contract(safe_abi, safeAddress);
         const one = importedEoaWeb3.utils.toBN("1");
         const addOwnerData = safeContract.methods.addOwnerWithThreshold(connectedWalletAddress, one).encodeABI();
         return <MetaTransactionData>{
