@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
     import { CirclesSafe } from "../models/circlesSafe";
-    import { crcToTc } from "@jaensen/timecircles";
+    import { crcToTc } from "@circles/timecircles";
     import Web3 from "web3";
     import { createFindPaymentPath } from "../stores/factories/queries/createFindPaymentPath";
     import { createFindCrcBalance } from "../stores/factories/queries/createFindCrcBalance";

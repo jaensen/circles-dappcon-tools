@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@circles/timecircles": "^1.0.6",
-    "@jaensen/timecircles": "^1.0.5",
     "@metamask/jazzicon": "^2.0.0",
     "@safe-global/api-kit": "^1.0.1",
     "@safe-global/protocol-kit": "^0.1.1",
@@ -17,6 +16,7 @@
     "@truffle/hdwallet-provider": "^2.1.10",
     "@web3-onboard/injected-wallets": "^2.8.5",
     "bip39": "^3.1.0",
+    "bn.js": "^5.2.1",
     "nullthrows": "^1.1.1",
     "svelte-spa-router": "^3.2.0",
     "vis-network": "^9.1.6",
