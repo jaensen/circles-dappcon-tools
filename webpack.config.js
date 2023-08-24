@@ -32,6 +32,8 @@ const production = merge(
 );
 
 const getConfig = (mode) => {
+  return merge(common, development, { mode });
+  /*
   switch (mode) {
     case "production":
       return merge(common, production, { mode });
@@ -39,7 +41,7 @@ const getConfig = (mode) => {
       return merge(common, development, { mode });
     default:
       throw new Error(`Unknown mode, ${mode}`);
-  }
+  }*/
 };
 
 module.exports = getConfig(mode);
