@@ -32,7 +32,9 @@
   const appMetadata = {
     name: AppName,
     icon: AppIcon,
+    logo: "https://circles.dappcon.io/images/dappconf-blue.png",
     description: AppDescription,
+    explore: "https://gnosisscan.io/",
     recommendedInjectedWallets: [
       { name: "MetaMask", url: "https://metamask.io" },
       { name: "Rabby", url: "https://rabby.io/" },
