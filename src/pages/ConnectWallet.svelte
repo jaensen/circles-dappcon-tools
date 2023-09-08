@@ -11,7 +11,11 @@
   export let onWalletConnected: (wallet: any) => void;
 
   const injected = injectedModule();
-  const walletConnect = walletConnectModule();
+  const walletConnect = walletConnectModule({
+    version: 2,
+    projectId: '66b9442819c049faf00b7c0c5df59203',
+    requiredChains: [100]
+  })
 
   const wallets = [injected, walletConnect];
 
@@ -54,6 +58,14 @@
 
     const web3Instance = new Web3((<any>mostRecentWallet).provider);
     web3.set(web3Instance);
+
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+      } catch (error) {
+        consle.warning(`Couldn't send 'eth_requestAccounts'.`);
+      }
+    }
 
     onWalletConnected?.(mostRecentWallet.accounts[0].address);
   };
