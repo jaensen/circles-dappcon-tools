@@ -2,7 +2,7 @@
     import Onboard from "@web3-onboard/core";
     import injectedModule from "@web3-onboard/injected-wallets";
     import walletConnectModule from "@web3-onboard/walletconnect";
-    import { AppDescription, AppIcon, AppName, RpcEndpoint } from "../consts";
+    import {AppMetadata, Chains} from "../consts";
     import { createEventDispatcher } from "svelte";
 
     const injected = injectedModule();
@@ -10,29 +10,10 @@
 
     const wallets = [injected, walletConnect];
 
-    const chains = [
-        {
-            id: "0x64",
-            token: "XDAI",
-            label: "Gnosis Chain",
-            rpcUrl: RpcEndpoint,
-        },
-    ];
-
-    const appMetadata = {
-        name: AppName,
-        icon: AppIcon,
-        description: AppDescription,
-        recommendedInjectedWallets: [
-            { name: "MetaMask", url: "https://metamask.io" },
-            { name: "Rabby", url: "https://rabby.io/" },
-        ],
-    };
-
     const onboard = Onboard({
-        wallets,
-        chains,
-        appMetadata,
+      wallets: wallets,
+      chains: Chains,
+      appMetadata: AppMetadata,
     });
 
     // Subscribe to wallet updates

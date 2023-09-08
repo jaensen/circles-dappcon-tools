@@ -2,7 +2,7 @@
   import Onboard from "@web3-onboard/core";
   import injectedModule from "@web3-onboard/injected-wallets";
   import walletConnectModule from "@web3-onboard/walletconnect";
-  import { AppDescription, AppIcon, AppName, RpcEndpoint } from "../consts";
+  import {AppMetadata, Chains} from "../consts";
   import { connectedWallet } from "../stores/singletons/connectedWallet";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
   import Web3 from "web3";
@@ -19,32 +19,10 @@
 
   const wallets = [injected, walletConnect];
 
-  const chains = [{
-      id: "0x64",
-      rpcUrl: RpcEndpoint,
-      label: "Gnosis Chain",
-      token: "xDai",
-      publicRpcUrl: RpcEndpoint,
-      blockExplorerUrl: "https://gnosisscan.io/"
-    }
-  ];
-
-  const appMetadata = {
-    name: AppName,
-    icon: AppIcon,
-    logo: "https://circles.dappcon.io/images/dappconf-blue.png",
-    description: AppDescription,
-    explore: "https://circles.dappcon.io/",
-    recommendedInjectedWallets: [
-      { name: "MetaMask", url: "https://metamask.io" },
-      { name: "Rabby", url: "https://rabby.io/" },
-    ],
-  };
-
   const onboard = Onboard({
-    wallets,
-    chains,
-    appMetadata,
+    wallets: wallets,
+    chains: Chains,
+    appMetadata: AppMetadata,
   });
 
   const connect = async () => {
