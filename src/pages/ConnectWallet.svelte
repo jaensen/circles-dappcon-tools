@@ -34,7 +34,7 @@
     icon: AppIcon,
     logo: "https://circles.dappcon.io/images/dappconf-blue.png",
     description: AppDescription,
-    explore: "https://gnosisscan.io/",
+    explore: "https://circles.dappcon.io/",
     recommendedInjectedWallets: [
       { name: "MetaMask", url: "https://metamask.io" },
       { name: "Rabby", url: "https://rabby.io/" },
