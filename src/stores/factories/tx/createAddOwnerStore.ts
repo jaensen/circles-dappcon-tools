@@ -4,7 +4,7 @@ import type { EoaTransactionStatus } from "../createEoaTransactionStore";
 import type { TransactionConfig } from "web3-core";
 import type { Readable } from "svelte/store";
 import HDWalletProvider from "@truffle/hdwallet-provider";
-import { RpcEndpoint } from "../../../consts";
+import { Chains } from "../../../consts";
 import { createSafeTransactionStore } from "../createSafeTransactionStore";
 import type { SafeTransactionStatus } from "../createSafeTransactionStore";
 import type { MetaTransactionData } from "@safe-global/safe-core-sdk-types";
@@ -17,7 +17,7 @@ export const createAddOwnerStore = async (connectedWalletWeb3: Web3, connectedWa
     const minRequiredGasForImportedEoa = "0.01";
     const provider = new HDWalletProvider({
         privateKeys: [eoaKey],
-        providerOrUrl: RpcEndpoint
+        providerOrUrl: Chains[0].rpcUrl
     });
     const importedEoaWeb3 = new Web3(provider);
     const importedEoaBalance = await importedEoaWeb3.eth.getBalance(eoaAccount.address);

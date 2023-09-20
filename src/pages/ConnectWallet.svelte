@@ -2,7 +2,7 @@
   import Onboard from "@web3-onboard/core";
   import injectedModule from "@web3-onboard/injected-wallets";
   import walletConnectModule from "@web3-onboard/walletconnect";
-  import { AppDescription, AppIcon, AppName, RpcEndpoint } from "../consts";
+  import {AppMetadata, Chains} from "../consts";
   import { connectedWallet } from "../stores/singletons/connectedWallet";
   import { connectedWalletAddress } from "../stores/singletons/connectedWalletAddress";
   import Web3 from "web3";
@@ -11,34 +11,18 @@
   export let onWalletConnected: (wallet: any) => void;
 
   const injected = injectedModule();
-  const walletConnect = walletConnectModule();
+  const walletConnect = walletConnectModule({
+    version: 2,
+    projectId: '66b9442819c049faf00b7c0c5df59203',
+    requiredChains: [100]
+  })
 
   const wallets = [injected, walletConnect];
 
-  const chains = [{
-      id: "0x64",
-      rpcUrl: RpcEndpoint,
-      label: "Gnosis Chain",
-      token: "xDai",
-      publicRpcUrl: RpcEndpoint,
-      blockExplorerUrl: "https://gnosisscan.io/"
-    }
-  ];
-
-  const appMetadata = {
-    name: AppName,
-    icon: AppIcon,
-    description: AppDescription,
-    recommendedInjectedWallets: [
-      { name: "MetaMask", url: "https://metamask.io" },
-      { name: "Rabby", url: "https://rabby.io/" },
-    ],
-  };
-
   const onboard = Onboard({
-    wallets,
-    chains,
-    appMetadata,
+    wallets: wallets,
+    chains: Chains,
+    appMetadata: AppMetadata,
   });
 
   const connect = async () => {
@@ -54,6 +38,14 @@
 
     const web3Instance = new Web3((<any>mostRecentWallet).provider);
     web3.set(web3Instance);
+
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+      } catch (error) {
+        consle.warning(`Couldn't send 'eth_requestAccounts'.`);
+      }
+    }
 
     onWalletConnected?.(mostRecentWallet.accounts[0].address);
   };
