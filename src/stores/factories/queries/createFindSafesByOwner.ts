@@ -1,7 +1,7 @@
 import { createLiveSearchStore } from "../createLiveSearchStore";
 import Web3 from "web3";
 import type { CirclesSafe } from "../../../models/circlesSafe";
-import { CirclesGardenApi } from "../../../consts";
+import { CirclesGardenApi, SafeTransactionApi } from "../../../consts";
 
 export type CirclesSafeMap = { [safeAddress: string]: CirclesSafe };
 
@@ -51,7 +51,7 @@ async function queryCirclesGarden(ownerAddress: string, safeAddresses: string[])
 async function queryCirclesSubgraph(ownerAddress: string) {
     const web3 = new Web3();
     const checksumAddress = web3.utils.toChecksumAddress(ownerAddress);
-    const requestUrl = `https://safe-transaction-gnosis-chain.safe.global/api/v1/owners/${checksumAddress}/safes/`;
+    const requestUrl = `${SafeTransactionApi}owners/${checksumAddress}/safes/`;
 
     const safesByOwnerResult = await fetch(requestUrl);
     const safesByOwner = await safesByOwnerResult.json();
