@@ -1,7 +1,7 @@
 import { createLiveSearchStore } from "../createLiveSearchStore";
 import Web3 from "web3";
 import type { CirclesSafe } from "../../../models/circlesSafe";
-import { CirclesGardenApi, SafeTransactionApi } from "../../../consts";
+import { CirclesGardenApi, getSafesByOwnerApiEndpoint } from "../../../consts";
 
 export type CirclesSafeMap = { [safeAddress: string]: CirclesSafe };
 
@@ -48,10 +48,10 @@ async function queryCirclesGarden(ownerAddress: string, safeAddresses: string[])
     return circlesSafeMap;
 }
 
-async function queryCirclesSubgraph(ownerAddress: string) {
+async function querySafeTransactionService(ownerAddress: string) {
     const web3 = new Web3();
     const checksumAddress = web3.utils.toChecksumAddress(ownerAddress);
-    const requestUrl = `${SafeTransactionApi}owners/${checksumAddress}/safes/`;
+    const requestUrl = getSafesByOwnerApiEndpoint(checksumAddress);
 
     const safesByOwnerResult = await fetch(requestUrl);
     const safesByOwner = await safesByOwnerResult.json();
@@ -64,7 +64,7 @@ export const createFindSafesByOwner = () => createLiveSearchStore<string, Circle
         return [];
     }
 
-    const safeAddresses = await queryCirclesSubgraph(ownerAddress);
+    const safeAddresses = await querySafeTransactionService(ownerAddress);
     const circlesSafeMap = await queryCirclesGarden(ownerAddress, safeAddresses);
 
     return safeAddresses.map(o => circlesSafeMap[o] ?? <CirclesSafe>{
