@@ -65,12 +65,16 @@ export const createFindSafesByOwner = () => createLiveSearchStore<string, Circle
     }
 
     const safeAddresses = await querySafeTransactionService(ownerAddress);
-    const circlesSafeMap = await queryCirclesGarden(ownerAddress, safeAddresses);
+    const lowercasedSafeAddresses = safeAddresses.map(o => o.toLowerCase());
+    const circlesSafeMap = await queryCirclesGarden(ownerAddress, lowercasedSafeAddresses);
 
-    return safeAddresses.map(o => circlesSafeMap[o] ?? <CirclesSafe>{
+    return lowercasedSafeAddresses.map(o => circlesSafeMap[o] ?? <CirclesSafe>{
         type: "Person",
         userName: "",
         safeAddress: o,
         ownerAddress: ownerAddress
     });
 }, undefined);
+
+
+
