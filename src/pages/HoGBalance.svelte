@@ -41,12 +41,7 @@
     <p class="text-primary">Your Circles balance:</p>
     <h1 class="mb-5 text-5xl font-bold text-primary">
       {Math.floor(
-        crcToTc(
-          Date.now(),
-          Number.parseFloat(
-            Web3.utils.fromWei($crcBalanceStore.result, "ether")
-          )
-        )
+        Number.parseFloat($crcBalanceStore.result)
       )} Circles
     </h1>
   {:else if $crcBalanceStore.error}
